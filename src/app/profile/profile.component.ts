@@ -68,8 +68,6 @@ export class ProfileComponent {
         this.realPosts.push(p);
       } */
       allPosts.forEach(post => {
-        console.log(post);
-        console.log(this.username);
         if(post.username === this.username) {
           userPosts.push(post as Post);
         }

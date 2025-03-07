@@ -1,6 +1,11 @@
+h4, h3, p {
+    color: black;
+}
+
 .card {
     background-color: white;
     padding: 2rem;
+    width: 50rem;
 }
 
 .card-content {
@@ -12,6 +17,10 @@
     justify-content: space-between;
 }
 
+.text-field {
+    background: none;
+}
+
 .header-image {
     background-image: url('/assets/avatar.png');
 }
@@ -21,6 +30,22 @@
     height: 2rem;
 }
 
-.comment-button {
+.comment-section {
     display: flex;
+    flex-wrap: wrap;
+    max-height: 10rem;
+}
+
+.comment-section > span {
+    flex: 50%;
+}
+
+.comment {
+    width: 100%;
+    margin-bottom: 0.125rem;
+}
+
+.comment > h4, p {
+    margin: 0;
+    display: inline;
 }

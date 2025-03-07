@@ -24,6 +24,5 @@ export class UserPostComponent {
 
   openDetails() {
     this.dialog.open(UserPostDetailsComponent, { data: this.post });
-    console.log('open dialog')
   }
 }
