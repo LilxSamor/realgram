@@ -29,7 +29,7 @@
             <mat-form-field>
                 <mat-label>Leave a comment</mat-label>
                 <input matInput type="text" [(ngModel)]="commentInput">
-                <button (click)="saveComment()" class="btn btn-success">Submit</button>
+                <mat-icon (click)="saveComment()" matSuffix aria-hidden="false" aria-label="Send" fontIcon="send"></mat-icon>
             </mat-form-field>
         </div>
         <button mat-icon-button>
