@@ -1,0 +1,45 @@
+<div>
+    <div>
+        <div class="user-info-container">
+            <div>
+                <img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/>
+                <h3>{{this.username}}</h3>
+                <p>lorem ipsum dies das ananas...</p>
+            </div>
+            <div>
+                <p><b>566</b></p><p>Beiträge</p>
+            </div>
+            <div>
+                <p><b>400</b></p><p>Follower</p>
+            </div>
+            <div>
+                <p><b>333</b></p><p>gefolgt</p>
+            </div>
+            <div class="break"></div>
+            <div class="user-posts">
+              <mat-tab-group [@.disabled]="true">
+                <mat-tab class="tab">
+                  <ng-template mat-tab-label>
+                    <mat-icon aria-hidden="false" aria-label="List View">menu</mat-icon>
+                  </ng-template>
+                  <div class="content-container">
+                    <ng-container *ngFor="let post of realPosts">
+                      <app-user-post [post]="post"></app-user-post>
+                    </ng-container>
+                  </div>
+                  <div class="footer-placeholder"></div>
+                </mat-tab>
+                <mat-tab class="tab">
+                  <ng-template mat-tab-label>
+                    <mat-icon aria-hidden="false" aria-label="Grid View">grid_view</mat-icon>
+                  </ng-template>
+                  <div style="padding: 2rem;">
+                    Content 2
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+        </div>
+    </div>
+</div>
+

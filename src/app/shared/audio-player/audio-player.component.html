@@ -1,0 +1,12 @@
+<audio controls #aud src="{{ audio1 }}" hidden></audio>
+
+<div class="player-container">
+  <button (click)="play()" mat-icon-button aria-label="Play/pause">
+    <mat-icon *ngIf="!isPlaying" class="icon">play_circle</mat-icon>
+    <mat-icon *ngIf="isPlaying" class="icon">stop_circle</mat-icon>
+  </button>
+  
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar" #progressBar></div>
+  </div>
+</div>

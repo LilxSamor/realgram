@@ -1,0 +1,26 @@
+.card {
+    background-color: white;
+    padding: 2rem;
+}
+
+.card-content {
+    padding: 0;
+}
+
+.card-actions {
+    padding: 0;
+    justify-content: space-between;
+}
+
+.header-image {
+    background-image: url('/assets/avatar.png');
+}
+
+.profile-picture {
+    width: 2rem;
+    height: 2rem;
+}
+
+.comment-button {
+    display: flex;
+}

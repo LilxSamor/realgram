@@ -1,0 +1,56 @@
+<!--h2 mat-dialog-title>Favorite Animal</h2>
+<mat-dialog-content>
+    test
+</mat-dialog-content-->
+<div class="card">
+    <div>
+        <div mat-card-avatar class="header-image"></div>
+        <mat-card-title>&#64;{{post.username}}</mat-card-title>
+        <mat-card-subtitle>{{post.type}}</mat-card-subtitle>
+    </div>
+    <mat-dialog-content class="card-content">
+        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo"></app-photo>
+        <app-video [post]="post" *ngIf="post.type===postTypes.Video"></app-video>
+        <app-audio-player [post]="post" *ngIf="post.type===postTypes.Audio"></app-audio-player>
+        <app-poll [post]="post" *ngIf="post.type===postTypes.Poll"></app-poll>
+        <p>
+            {{post.description}}
+        </p>
+    </mat-dialog-content>
+    <mat-dialog-actions class="card-actions">
+        <div class="comment-button">
+            <img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/>
+            <button mat-button>ADD COMMENT</button>
+        </div>
+        <button mat-icon-button aria-label="Like this post">
+            <mat-icon>favorite</mat-icon>
+        </button>
+    </mat-dialog-actions>
+</div>
+
+<!--mat-card class="card" appearance="outlined">
+    <mat-card-header>
+        <div mat-card-avatar class="header-image"></div>
+        <mat-card-title>&#64;{{post.username}}</mat-card-title>
+        <mat-card-subtitle>{{post.type}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo"></app-photo>
+        <app-video [post]="post" *ngIf="post.type===postTypes.Video"></app-video>
+        <app-audio-player [post]="post" *ngIf="post.type===postTypes.Audio"></app-audio-player>
+        <app-poll [post]="post" *ngIf="post.type===postTypes.Poll"></app-poll>
+        <p>
+            {{post.description}}
+        </p>
+    </mat-card-content>
+    <mat-card-actions class="card-actions">
+        <div class="comment-button">
+            <img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/>
+            <button mat-button>ADD COMMENT</button>
+        </div>
+        <button mat-icon-button aria-label="Like this post">
+            <mat-icon>favorite</mat-icon>
+        </button>
+    </mat-card-actions>
+    <button mat-stroked-button [mat-dialog-close]>Close</button>
+</mat-card-->

@@ -1,0 +1,13 @@
+<div class="feed">
+    <div class="feed-header">
+        <!--img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/-->
+
+        <h2 class="app-title"><img class="logo" [src]="'assets/realgram.svg'" alt="Logo"/>&nbsp;<span>REALGRAM</span></h2>
+    </div>
+    <div class="content-container">
+        <ng-container *ngFor="let post of realPosts">
+            <app-user-post [post]="post"></app-user-post>
+        </ng-container>
+    </div>
+    <div class="footer-placeholder"></div>
+</div>

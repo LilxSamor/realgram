@@ -1,0 +1,53 @@
+<div class="example-container">
+    <form (ngSubmit)="signUp(username.value, email.value!, password.value)">
+
+        <mat-form-field>
+            <mat-label>Enter your username</mat-label>
+            <input
+            matInput
+            placeholder="username"
+            [formControl]="username"
+            required
+            />
+            @if (email.invalid) {
+            <mat-error>{{errorMessage()}}</mat-error>
+            }
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label>Enter your email</mat-label>
+            <input
+            matInput
+            placeholder="test@example.com"
+            [formControl]="email"
+            (blur)="updateErrorMessage()"
+            required
+            />
+            @if (email.invalid) {
+            <mat-error>{{errorMessage()}}</mat-error>
+            }
+        </mat-form-field>
+    
+        <mat-form-field>
+            <mat-label>Enter your password</mat-label>
+            <input matInput [formControl]="password" [type]="hide() ? 'password' : 'text'" />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="clickEvent($event)"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="hide()"
+              required
+            >
+              <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+        <button class="button" type="submit">Signup</button>
+    </form>
+</div>
+
+<!--p>login works!</p>
+
+<button (click)="signInWithGoogle()">login</button>
+
+<p *ngIf="this.uid">{{this.uid}}</p-->

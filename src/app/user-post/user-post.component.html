@@ -1,0 +1,25 @@
+<mat-card class="card" appearance="outlined">
+    <mat-card-header>
+        <div mat-card-avatar class="header-image"></div>
+        <mat-card-title>&#64;{{post.username}}</mat-card-title>
+        <mat-card-subtitle>{{post.type}}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo"></app-photo>
+        <app-video [post]="post" *ngIf="post.type===postTypes.Video"></app-video>
+        <app-audio-player [post]="post" *ngIf="post.type===postTypes.Audio"></app-audio-player>
+        <app-poll [post]="post" *ngIf="post.type===postTypes.Poll"></app-poll>
+        <p>
+            {{post.description}}
+        </p>
+    </mat-card-content>
+    <mat-card-actions class="card-actions">
+        <div class="comment-button">
+            <img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/>
+            <button mat-button (click)="openDetails()">ADD COMMENT</button>
+        </div>
+        <button mat-icon-button aria-label="Like this post">
+            <mat-icon>favorite</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

@@ -1,0 +1,41 @@
+p {
+    font-family: Lato;
+}
+
+.icon {
+    transform: scale(1.3);
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+}
+
+.player-container {
+    display: flex;
+    align-items: center;
+}
+
+.progress-container {
+    width: 100%;
+    height: 0.2rem;
+    background-color: #dadada;
+    border-radius: 1rem;
+}
+
+.progress-bar, input[type='range'] {
+    width: 100%;
+    height: 100%;
+}
+
+.progress-bar {
+    background-color: #70e8ed;
+    border-radius: 1rem;
+}
+
+button {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+  

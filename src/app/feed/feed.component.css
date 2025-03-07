@@ -1,0 +1,44 @@
+.feed {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.content-container {
+    margin: auto;
+}
+
+/*.feed-header {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 2rem;
+    height: 100%;
+    width: 100%;
+}*/
+
+.app-title {
+    width: 100%;
+    text-align: center;
+}
+
+.logo {
+    height: 1em;
+}
+
+.card {
+    background-color: white;
+    margin: 2rem;
+}
+
+.header-image {
+    background-image: url('/assets/avatar.png');
+}
+
+.profile-picture {
+    width: 4rem;
+    height: 4rem;
+}
+
+.footer-placeholder {
+    min-height: 6rem;
+}
