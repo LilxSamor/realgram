@@ -10,6 +10,10 @@ import { VideoComponent } from '../shared/video/video.component';
 import { PollComponent } from '../shared/poll/poll.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserPostDetailsComponent } from '../user-post-details/user-post-details.component';
+import { Auth } from '@angular/fire/auth';
+import { AuthService } from '../services/auth.service';
+import { CustomUser } from '../shared/model/user';
+import { UserPostService } from '../services/user-post.service';
 
 @Component({
   selector: 'app-user-post',
@@ -20,9 +24,24 @@ import { UserPostDetailsComponent } from '../user-post-details/user-post-details
 export class UserPostComponent {
   @Input({ required: true }) post!: Post;
   postTypes = Type;
+  auth = inject(Auth);
   dialog = inject(MatDialog);
+
+  currentUser: CustomUser = new CustomUser(this.auth);
+
+  constructor(private authService: AuthService, private userPostService: UserPostService) {
+    this.authService.getUsername(this.auth.currentUser?.uid!).subscribe(data => {
+      if(data) {
+        this.currentUser = data;
+      }
+    });
+  }
 
   openDetails() {
     this.dialog.open(UserPostDetailsComponent, { data: this.post });
+  }
+
+  deletePost() {
+    // this.userPostService.delete(this.post.key!);
   }
 }

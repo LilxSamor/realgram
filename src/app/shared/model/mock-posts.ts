@@ -22,7 +22,7 @@ export const POSTS: Post[] = [
         url: ""
     },
 ];*/
-
+/*
 export const POSTS: Post[] = [
     {
         id: 0, username: 'liluzivert', type: Type.Text, description: 'dies das ananas',
@@ -44,4 +44,4 @@ export const POSTS: Post[] = [
         id: 4, username: 'yunghurn', type: Type.Video, description: 'go-getter',
         url: "/assets/sample-video2.mp4"
     },
-];
+];*/

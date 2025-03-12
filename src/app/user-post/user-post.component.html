@@ -18,8 +18,13 @@
             <img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/>
             <button mat-button (click)="openDetails()">ADD COMMENT</button>
         </div>
-        <button mat-icon-button aria-label="Like this post">
-            <mat-icon>favorite</mat-icon>
-        </button>
+        <div>
+            <button mat-icon-button aria-label="Like this post">
+                <mat-icon>favorite</mat-icon>
+            </button>
+            <button (click)="deletePost()" *ngIf="currentUser.username == post.username" mat-icon-button aria-label="Delete this post">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
     </mat-card-actions>
 </mat-card>

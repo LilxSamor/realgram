@@ -3,7 +3,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import { UserPostComponent } from "../user-post/user-post.component";
-import { POSTS } from '../shared/model/mock-posts';
 import { NgFor } from '@angular/common';
 import { UserPostService } from '../services/user-post.service';
 import { Post } from '../shared/model/post';
@@ -22,10 +21,7 @@ import { CustomUser } from '../shared/model/user';
 })
 export class ProfileComponent {
   auth = inject(Auth);
-  
-  posts = POSTS;
 
-  // realPosts?: Post[];
   realPosts: Post[] = [];
   
   currentUser: CustomUser = new CustomUser(this.auth);
@@ -43,7 +39,6 @@ export class ProfileComponent {
   }
 
   ngOnInit(): void {
-    this.posts = POSTS;
     this.retrievePosts();
   }
 
@@ -60,13 +55,6 @@ export class ProfileComponent {
         )
       )
     ).subscribe(allPosts => {
-      /*
-      for(let key of data){
-        let p = new Post();
-        p.id = key.id;
-
-        this.realPosts.push(p);
-      } */
       allPosts.forEach(post => {
         if(post.username === this.username) {
           userPosts.push(post as Post);

@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { POSTS } from '../shared/model/mock-posts';
 import { NgFor } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,15 +14,11 @@ import { map } from 'rxjs/operators';
   styleUrl: './feed.component.css'
 })
 export class FeedComponent {
-  posts = POSTS;
-
-  // realPosts?: Post[];
   realPosts: Post[] = [];
 
   constructor(private userPostService: UserPostService) {}
 
   ngOnInit(): void {
-    this.posts = POSTS;
     this.retrievePosts();
   }
 
@@ -35,13 +30,6 @@ export class FeedComponent {
         )
       )
     ).subscribe(data => {
-      /*
-      for(let key of data){
-        let p = new Post();
-        p.id = key.id;
-
-        this.realPosts.push(p);
-      } */
       let sortedData = data.sort((a, b) =>  b.id! - a.id!)
       this.realPosts = sortedData as Post[];
     });

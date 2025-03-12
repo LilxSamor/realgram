@@ -11,6 +11,7 @@ import { CustomUser } from '../shared/model/user';
 import { AuthService } from '../services/auth.service';
 import { count } from 'console';
 import { map } from 'rxjs';
+import { UploadService } from '../services/upload.service';
 
 @Component({
   selector: 'app-upload-post',
@@ -28,7 +29,10 @@ export class UploadPostComponent {
   uid?: string = '';
   username: string = '';
 
-  constructor(private userPostService: UserPostService, private authService: AuthService) {
+  selectedFile: any = '';
+  fileSrc: string = '';
+
+  constructor(private userPostService: UserPostService, private authService: AuthService, private uploadService: UploadService) {
     this.uid = this.auth.currentUser?.uid;
       this.authService.getUsername(this.uid!).subscribe(data => {
         if(data) {
@@ -55,6 +59,10 @@ export class UploadPostComponent {
     this.post.username = this.username;
     this.post.type = Type.Text;
     this.post.url = '';
+    this.post.key = '';
+    if(this.selectedFile) {
+      this.uploadFile();
+    }
 
     this.userPostService.create(this.post).then(() => {
       this.submitted = true;
@@ -66,17 +74,20 @@ export class UploadPostComponent {
     this.post = new Post();
   }
 
-  uploadFile(event: any): void {
-    const file = event.target.files[0];
-    const filePath = ''
+  uploadFile(): void {
+    const file = this.selectedFile;
+    this.uploadService.uploadFile(file);
+  }
 
-    const upload = async () => {
-      try {
-        // const storage = getStorage();
-        
-      } catch (e) {
-        console.error(e)
+  selectFile(event: any) {
+    const reader = new FileReader();
+    if(event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.fileSrc = reader.result as string;
       }
+      this.selectedFile = file;
     }
   }
 }

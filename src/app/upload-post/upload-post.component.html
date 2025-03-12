@@ -12,18 +12,7 @@
             />
         </div>
 
-        <input type="file" (change)="uploadFile($event)" /><br />
-
-        <!--div class="form-group">
-        <label for="description">Description</label>
-        <input
-            class="form-control"
-            id="description"
-            required
-            [(ngModel)]="tutorial.description"
-            name="description"
-        />
-        </div-->
+        <input type="file" (change)="selectFile($event)" /><br />
 
         <button (click)="savePost()" class="btn btn-success">Submit</button>
     </div>

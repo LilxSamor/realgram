@@ -9,5 +9,8 @@ export const environment = {
         appId: "1:7885630519:web:2ebc98afa61dd3fbcae3b2",
         measurementId: "G-SLPQBDPKSS"
     },
-    backendUrl: 'http://localhost:4200'
+    backendUrl: 'http://localhost:4200',
+    awsAccessKeyId: 'AKIAZVMTVFTIU5RTTNM5',
+    awsSecretAccessKey: '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',
+    awsBucket: 'real.gram'
 };

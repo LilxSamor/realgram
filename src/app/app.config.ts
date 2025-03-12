@@ -12,6 +12,9 @@ import { FIREBASE_OPTIONS } from '@angular/fire/compat';
 import { environment } from '../environments/environment';
 import { UserPostService } from './services/user-post.service';
 import { getStorage, provideStorage } from '@angular/fire/storage';
+import { authConfig } from './auth/auth.config';
+import { provideAuth as provideAuth_alias } from 'angular-auth-oidc-client';
+import { provideHttpClient } from '@angular/common/http';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDXb195ky45HzIbUZSvPP9K6b66v9y5iAE",
@@ -26,6 +29,7 @@ const firebaseConfig = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideHttpClient(),
     provideZoneChangeDetection({ eventCoalescing: true }), 
     provideRouter(routes), 
     /**provideClientHydration(withEventReplay())
@@ -52,6 +56,6 @@ export const appConfig: ApplicationConfig = {
       provideAuth(() => getAuth()),
       provideFirestore(() => getFirestore()),
       provideDatabase(() => getDatabase()), 
-      provideAnimationsAsync(), provideDatabase(() => getDatabase()), provideStorage(() => getStorage())
+      provideAnimationsAsync(), provideDatabase(() => getDatabase()), provideStorage(() => getStorage()), provideAuth_alias(authConfig)
     ],
 };
