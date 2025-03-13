@@ -13,13 +13,16 @@ import { HttpBackend } from '@angular/common/http'
   providedIn: 'root'
 })
 export class UploadService {
-  constructor(private http: HttpClient, private httpHandler: HttpBackend) {}
+  accessKeyId = ''
+  secretAccessKey = ''
+
+  constructor(private http: HttpClient) {}
 
   s3 = new S3Client({
     region: 'us-east-1',
     credentials: {
-      accessKeyId: 'AKIAZVMTVFTIU5RTTNM5',
-      secretAccessKey: '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',
+      accessKeyId: this.accessKeyId,
+      secretAccessKey: this.secretAccessKey,
     },
   });
 
@@ -29,12 +32,32 @@ export class UploadService {
     });
   }
 
+  async uploadPfp(file: File, username: string) {
+    const s3 = new S3Client({
+      region: 'us-east-1',
+      credentials: {
+        accessKeyId: this.accessKeyId,
+        secretAccessKey: this.secretAccessKey,
+      },
+    });
+
+    const fileArrayBuffer = await file.arrayBuffer();
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: "real.gram",
+        Key: 'avatars/' + username + '.' + file.name,
+        Body: new Uint8Array(fileArrayBuffer)
+      })
+    );
+  }
+
   async uploadFile(file: File) {
     const s3 = new S3Client({
       region: 'us-east-1',
       credentials: {
-        accessKeyId: 'AKIAZVMTVFTIU5RTTNM5',
-        secretAccessKey: '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',
+        accessKeyId: this.accessKeyId,
+        secretAccessKey: this.secretAccessKey,
       },
     });
 
