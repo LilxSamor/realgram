@@ -29,12 +29,16 @@ export class AuthService {
   }
 
   createNewUser(user: CustomUser) {
-    //return this.customUserRef.push(user);
     return this.customUserObjRef.child(`${user.uid}`).set({
       uid: user.uid,
       username: user.username,
-      email: user.email
+      email: user.email,
+      picture_url: user.picture_url
     })
+  }
+
+  getAll(): AngularFireList<CustomUser> {
+      return this.customUserRef;
   }
 
   getUsername(uid: string): Observable<CustomUser> {
@@ -47,11 +51,11 @@ export class AuthService {
     username = username.toLowerCase()
     return this.db.object(`/Users/${uid}/${username}`)
   }
-/*
-  loginWithPassword(username: string, email: string, password: string): Observable<any> {
-    const res = () => createUserWithEmailAndPassword(this.auth, email, password);
+
+  loginWithPassword(email: string, password: string): Observable<any> {
+    const res = () => signInWithEmailAndPassword(this.auth, email, password);
     return defer(res);
-  }*/
+  }
 
   signUp(username: string, email: string, password: string): Observable<any> {
     const res = () => createUserWithEmailAndPassword(this.auth, email, password);

@@ -1,24 +1,56 @@
 <div class="submit-form">
     <div *ngIf="!submitted">
-        <div class="form-group">
-            <label for="description">Description</label>
-            <input
-                type="text"
-                class="form-control"
-                id="description"
-                required
-                [(ngModel)]="post.description"
-                name="description"
-            />
-        </div>
+        <mat-stepper class="stepper" orientation="vertical" [linear]="false" #stepper>
+            <mat-step>
+                <form>
+                    <ng-template matStepLabel>Describe your post</ng-template>
+                    <mat-form-field>
+                        <mat-label>Description</mat-label>
+                        <input matInput type="text" class="form-control" id="description" required [(ngModel)]="post.description" name="description"/>
+                    </mat-form-field>
+                    <div>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <form>
+                    <ng-template matStepLabel>Upload a photo, video or audio</ng-template>
+                    <button type="button" mat-button (click)="fileInput.click()">Choose file</button>
+                    <input #fileInput hidden type="file" (change)="selectFile($event)" /><br />
+                    <div>
+                        <button mat-button matStepperPrevious>Back</button>
+                        <button mat-button matStepperNext>Next</button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>Post</ng-template>
+                <div>
+                    <button mat-button (click)="savePost()">Post</button>
+                        <div *ngIf="submitted">
+                            <h4>You submitted successfully!</h4>
+                            <button mat-button (click)="newPost()">Add</button>
+                        </div>
+                </div>
+            </mat-step>
+        </mat-stepper>
 
-        <input type="file" (change)="selectFile($event)" /><br />
+        <!--form class="form-group">
+            <mat-form-field>
+                <mat-label>Description</mat-label>
+                <input matInput type="text" class="form-control" id="description" required [(ngModel)]="post.description" name="description"/>
+            </mat-form-field>
+        </form>
 
-        <button (click)="savePost()" class="btn btn-success">Submit</button>
+        <button type="button" mat-button (click)="fileInput.click()">Choose file</button>
+        <input #fileInput hidden type="file" (change)="selectFile($event)" /><br />
+
+        <button mat-button (click)="savePost()">Submit</button>
     </div>
 
     <div *ngIf="submitted">
         <h4>You submitted successfully!</h4>
-        <button class="btn btn-success" (click)="newPost()">Add</button>
-    </div>
+        <button mat-button (click)="newPost()">Add</button>
+    </div-->
 </div>

@@ -33,6 +33,8 @@ export class UploadService {
   }
 
   async uploadPfp(file: File, username: string) {
+    const fileExtension = file.name.split('.').pop()
+
     const s3 = new S3Client({
       region: 'us-east-1',
       credentials: {
@@ -46,7 +48,7 @@ export class UploadService {
     await s3.send(
       new PutObjectCommand({
         Bucket: "real.gram",
-        Key: 'avatars/' + username + '.' + file.name,
+        Key: 'avatars/' + username + '.' + fileExtension,
         Body: new Uint8Array(fileArrayBuffer)
       })
     );

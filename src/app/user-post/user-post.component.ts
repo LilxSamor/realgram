@@ -2,8 +2,9 @@ import { Component, inject, Input, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatBadgeModule } from '@angular/material/badge';
 import { Post, Type } from '../shared/model/post';
-import { NgIf } from '@angular/common';
+import { NgClass, NgIf, NgStyle } from '@angular/common';
 import { AudioPlayerComponent } from "../shared/audio-player/audio-player.component";
 import { PhotoComponent } from '../shared/photo/photo.component';
 import { VideoComponent } from '../shared/video/video.component';
@@ -14,10 +15,13 @@ import { Auth } from '@angular/fire/auth';
 import { AuthService } from '../services/auth.service';
 import { CustomUser } from '../shared/model/user';
 import { UserPostService } from '../services/user-post.service';
+import { LikeService } from '../services/like.service';
+import { Like } from '../shared/model/like';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-user-post',
-  imports: [MatCardModule, MatButtonModule, MatIconModule, NgIf, PollComponent, AudioPlayerComponent, PhotoComponent, VideoComponent],
+  imports: [MatCardModule, MatButtonModule, MatIconModule, MatBadgeModule, NgIf, NgStyle, NgClass, PollComponent, AudioPlayerComponent, PhotoComponent, VideoComponent],
   templateUrl: './user-post.component.html',
   styleUrl: './user-post.component.css'
 })
@@ -29,16 +33,63 @@ export class UserPostComponent {
 
   currentUser: CustomUser = new CustomUser(this.auth);
 
-  constructor(private authService: AuthService, private userPostService: UserPostService) {
+  profilePictureUrl = 'https://s3.us-east-1.amazonaws.com/real.gram/avatars/';
+
+  like: Like = new Like();
+  likedByUser = false;
+  allLikes: Like[] = [];
+  countOfAllLikes = 0;
+
+  ngOnInit() {
+    this.profilePictureUrl = 'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.post.username + '.jpg';
+  }
+
+  constructor(private authService: AuthService, private likeService: LikeService, private userPostService: UserPostService) {
     this.authService.getUsername(this.auth.currentUser?.uid!).subscribe(data => {
       if(data) {
         this.currentUser = data;
+        this.getLikes();
       }
     });
   }
 
   openDetails() {
     this.dialog.open(UserPostDetailsComponent, { data: this.post });
+  }
+
+  getLikes() {
+    const likes = this.likeService.getAll().snapshotChanges().pipe(
+      map(changes => 
+        changes.map(c => 
+          ({ key: c.payload.key, ...c.payload.val() })
+        )
+      )
+    ).subscribe(likes => {
+      let filteredLikes = likes.filter(a => a.pid === this.post.id);
+      let likeRef = filteredLikes.find(a => a.pid === this.post.id);
+      if(likeRef?.username === this.currentUser.username) {
+        this.likedByUser = true;
+      }
+      this.countOfAllLikes = filteredLikes.length;
+      this.allLikes = likes as Like[];
+    });
+  }
+
+  likePost() {
+    if(this.likedByUser == true) {
+      let likeRef = this.allLikes.find(a => a.pid === this.post.id);
+      /*this.likeService.delete(likeRef!.key!).then(() => {
+        this.likedByUser = false;
+      });*/
+    } else {
+      this.like.key = '';
+      this.like.username = this.currentUser.username;
+      this.like.pid = this.post.id;
+  
+      this.likeService.create(this.like).then(() => {
+        this.likedByUser = true;
+      });
+    }
   }
 
   deletePost() {

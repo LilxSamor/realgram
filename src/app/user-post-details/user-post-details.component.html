@@ -25,7 +25,8 @@
     </mat-dialog-content>
     <mat-dialog-actions class="card-actions">
         <div class="comment-button">
-            <img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/>
+            <img *ngIf="currentUser.picture_url" class="profile-picture" [src]="currentUser.picture_url" alt="Profile picture"/>
+            <img *ngIf="!currentUser.picture_url" class="profile-picture" [src]="'/assets/avatar.png'" alt="Profile picture"/>
             <mat-form-field>
                 <mat-label>Leave a comment</mat-label>
                 <input matInput type="text" [(ngModel)]="commentInput">

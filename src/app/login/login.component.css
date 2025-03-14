@@ -1,0 +1,16 @@
+h1, p {
+    color: white;
+}
+
+.tab-group {
+    background-color: black;
+}
+
+.stepper {
+    height: 100vh;
+    padding: 4em;
+}
+
+.signin-form-field {
+    display: block;
+}

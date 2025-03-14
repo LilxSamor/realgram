@@ -16,6 +16,28 @@
 .profile-picture {
     width: 2rem;
     height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.favorite-icon {
+    color: palevioletred;
+}
+
+.liked {
+    color: crimson;
+}
+
+.countOfAllLikes {
+    display: inline;
+    position: absolute;
+    font-size: 0.8em;
+    margin: 0;
+    bottom: 2rem;
+}
+
+.mat-badge-content {
+    background: none;
 }
 
 .comment-button {

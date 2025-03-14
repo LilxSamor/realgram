@@ -10,7 +10,4 @@ export const environment = {
         measurementId: "G-SLPQBDPKSS"
     },
     backendUrl: 'http://localhost:4200',
-    awsAccessKeyId: 'AKIAZVMTVFTIU5RTTNM5',
-    awsSecretAccessKey: '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',
-    awsBucket: 'real.gram'
 };

@@ -4,7 +4,7 @@ import { UserPostService } from '../services/user-post.service';
 import { NgIf } from '@angular/common';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, Validators } from '@angular/forms';
 import { Auth } from '@angular/fire/auth';
 import getStorage  from '@angular/fire/storage';
 import { CustomUser } from '../shared/model/user';
@@ -12,15 +12,25 @@ import { AuthService } from '../services/auth.service';
 import { count } from 'console';
 import { map } from 'rxjs';
 import { UploadService } from '../services/upload.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-upload-post',
-  imports: [ NgIf, FormsModule, MatFormFieldModule, MatInputModule ],
+  imports: [ NgIf, FormsModule, MatFormFieldModule, MatStepperModule, MatInputModule, MatButtonModule ],
   templateUrl: './upload-post.component.html',
   styleUrl: './upload-post.component.css'
 })
 export class UploadPostComponent {
   auth = inject(Auth);
+  
+  private _formBuilder = inject(FormBuilder);
+  descriptionFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required],
+  });
+  fileFormGroup = this._formBuilder.group({
+    secondCtrl: [''],
+  });
 
   post: Post = new Post();
   submitted = false;
@@ -62,6 +72,15 @@ export class UploadPostComponent {
     this.post.key = '';
     if(this.selectedFile) {
       this.uploadFile();
+      this.post.url = 'https://s3.us-east-1.amazonaws.com/real.gram/' + this.selectedFile.name;
+      if(this.selectedFile.type.includes('video')) {
+        this.post.type = Type.Video;
+      } else if (this.selectedFile.type.includes('image')) {
+        this.post.type = Type.Photo;
+      } else if (this.selectedFile.type.includes('audio')) {
+        this.post.type = Type.Audio;
+      }
+      console.log(this.post.url)
     }
 
     this.userPostService.create(this.post).then(() => {
@@ -88,6 +107,7 @@ export class UploadPostComponent {
         this.fileSrc = reader.result as string;
       }
       this.selectedFile = file;
+      console.log(this.selectedFile.type)
     }
   }
 }

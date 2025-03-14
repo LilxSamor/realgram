@@ -4,7 +4,7 @@ export class CustomUser {
     uid!: string;
     username!: string;
     email!: string;
-    // picture_url!: string;
+    picture_url?: string;
 
     constructor(auth: any) {
         this.uid = auth.uid;

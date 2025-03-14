@@ -6,10 +6,11 @@ import { UserPostComponent } from '../user-post/user-post.component';
 import { Post } from '../shared/model/post';
 import { UserPostService } from '../services/user-post.service';
 import { map } from 'rxjs/operators';
+import { HeaderComponent } from "../shared/header/header.component";
 
 @Component({
   selector: 'app-feed',
-  imports: [NgFor, MatCardModule, MatButtonModule, UserPostComponent],
+  imports: [NgFor, MatCardModule, MatButtonModule, UserPostComponent, HeaderComponent],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css'
 })

@@ -1,5 +1,131 @@
-<div class="example-container">
-    <form (ngSubmit)="signUp(username.value, email.value!, password.value)">
+<div class="container">
+    <mat-tab-group class="tab-group">
+        <mat-tab label="Login">
+            <mat-stepper class="stepper" orientation="vertical" [linear]="false" #stepper>
+                <mat-step [stepControl]="usernameFormGroupLogin">
+                    <form [formGroup]="usernameFormGroupLogin">
+                        <ng-template matStepLabel>Fill out your credentials</ng-template>
+                        <mat-form-field class="signin-form-field">
+                            <mat-label>Username</mat-label>
+                            <input
+                            matInput
+                            placeholder="username"
+                            [formControl]="usernameLogin"
+                            required
+                            />
+                        </mat-form-field>
+                        <mat-form-field class="signin-form-field">
+                            <mat-label>Enter your password</mat-label>
+                            <input matInput [formControl]="passwordLogin" [type]="hide() ? 'password' : 'text'" />
+                            <button
+                                mat-icon-button
+                                matSuffix
+                                (click)="clickEvent($event)"
+                                [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide()"
+                                required
+                            >
+                                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                        </mat-form-field>
+                        <div>
+                            <button mat-button (click)="signIn(usernameLogin.value, passwordLogin.value)" class="button" type="submit">Login</button>
+                        </div>
+                    </form>
+                </mat-step>
+            </mat-stepper>
+        </mat-tab>
+        <mat-tab label="Signup">
+            <mat-stepper class="stepper" orientation="vertical" [linear]="false" #stepper>
+                <mat-step [stepControl]="usernameFormGroupSignup">
+                    <form [formGroup]="usernameFormGroupSignup">
+                        <ng-template matStepLabel>Fill out your username</ng-template>
+                        <mat-form-field class="signin-form-field">
+                            <mat-label>Username</mat-label>
+                            <input
+                            matInput
+                            placeholder="username"
+                            [formControl]="usernameSignup"
+                            required
+                            />
+                            @if (emailSignup.invalid) {
+                            <mat-error>{{errorMessage()}}</mat-error>
+                            }
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="emailFormGroupSignup">
+                    <form [formGroup]="emailFormGroupSignup">
+                        <ng-template matStepLabel>Fill out your email address</ng-template>
+                        <mat-form-field class="signin-form-field">
+                            <mat-label>Email Address</mat-label>
+                            <input
+                            matInput
+                            placeholder="test@example.com"
+                            [formControl]="emailSignup"
+                            (blur)="updateErrorMessage()"
+                            required
+                            />
+                            @if (emailSignup.invalid) {
+                            <mat-error>{{errorMessage()}}</mat-error>
+                            }
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="passwordFormGroupSignup">
+                    <form [formGroup]="passwordFormGroupSignup">
+                        <ng-template matStepLabel>Fill out your password</ng-template>
+                        <mat-form-field class="signin-form-field">
+                            <mat-label>Enter your password</mat-label>
+                            <input matInput [formControl]="passwordSignup" [type]="hide() ? 'password' : 'text'" />
+                            <button
+                                mat-icon-button
+                                matSuffix
+                                (click)="clickEvent($event)"
+                                [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hide()"
+                                required
+                            >
+                                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            </button>
+                        </mat-form-field>
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step [stepControl]="pictureFormGroupSignup">
+                    <form [formGroup]="pictureFormGroupSignup">
+                        <ng-template matStepLabel>Upload your profile picture</ng-template>
+                        <button type="button" mat-button (click)="fileInput.click()">Choose file</button>
+                        <input #fileInput hidden type="file" (change)="selectFile($event)" /><br />
+                        <div>
+                            <button mat-button matStepperPrevious>Back</button>
+                            <button mat-button matStepperNext>Next</button>
+                        </div>
+                    </form>
+                </mat-step>
+                <mat-step>
+                  <ng-template matStepLabel>Done</ng-template>
+                  <p>You are now done.</p>
+                  <div>
+                    <button mat-button matStepperPrevious>Back</button>
+                    <button mat-button (click)="signUp(usernameSignup.value, emailSignup.value!, passwordSignup.value)" class="button" type="submit">Signup</button>
+                  </div>
+                </mat-step>
+            </mat-stepper>
+        </mat-tab>
+    </mat-tab-group>
+    
+    <!--form (ngSubmit)="signUp(username.value, email.value!, password.value)">
 
         <mat-form-field>
             <mat-label>Enter your username</mat-label>
@@ -42,12 +168,9 @@
               <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
             </button>
         </mat-form-field>
+        
+        <input type="file" (change)="selectFile($event)" /><br />
+
         <button class="button" type="submit">Signup</button>
-    </form>
+    </form-->
 </div>
-
-<!--p>login works!</p>
-
-<button (click)="signInWithGoogle()">login</button>
-
-<p *ngIf="this.uid">{{this.uid}}</p-->

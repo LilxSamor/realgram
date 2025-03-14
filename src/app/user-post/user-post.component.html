@@ -1,6 +1,6 @@
 <mat-card class="card" appearance="outlined">
     <mat-card-header>
-        <div mat-card-avatar class="header-image"></div>
+        <div mat-card-avatar class="header-image" [ngStyle]="{ background: 'url({{this.profilePictureUrl}}), url(/assets/avatar.png)' }" ></div>
         <mat-card-title>&#64;{{post.username}}</mat-card-title>
         <mat-card-subtitle>{{post.type}}</mat-card-subtitle>
     </mat-card-header>
@@ -15,12 +15,14 @@
     </mat-card-content>
     <mat-card-actions class="card-actions">
         <div class="comment-button">
-            <img class="profile-picture" [src]="'assets/avatar.png'" alt="Profile picture"/>
+            <img *ngIf="currentUser.picture_url" class="profile-picture" [src]="currentUser.picture_url" alt="Profile picture"/>
+            <img *ngIf="!currentUser.picture_url" class="profile-picture" [src]="'/assets/avatar.png'" alt="Profile picture"/>
             <button mat-button (click)="openDetails()">ADD COMMENT</button>
         </div>
         <div>
-            <button mat-icon-button aria-label="Like this post">
-                <mat-icon>favorite</mat-icon>
+            <button (click)="likePost()" mat-icon-button aria-label="Like this post">
+                <mat-icon [ngClass]="{'liked': likedByUser}" class="favorite-icon">favorite</mat-icon>
+                <div class="countOfAllLikes" *ngIf="this.countOfAllLikes>0" [matBadge]="this.countOfAllLikes" [matBadgeSize]="'medium'" [matBadgePosition]="'before'"></div>
             </button>
             <button (click)="deletePost()" *ngIf="currentUser.username == post.username" mat-icon-button aria-label="Delete this post">
                 <mat-icon>delete</mat-icon>

@@ -1,0 +1,14 @@
+.app-title {
+    width: 100%;
+    text-align: center;
+}
+
+.logo {
+    height: 1em;
+}
+
+.feed-header {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
