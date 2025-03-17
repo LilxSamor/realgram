@@ -5,15 +5,17 @@
                 <img class="profile-picture" [src]="'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.username + '.jpg'" alt="Profile picture"/>
                 <h3>{{this.username}}</h3>
                 <p>lorem ipsum dies das ananas...</p>
+                <button *ngIf="!isProfileOfUser && !currentUserFollowsShownUser" (click)="this.followUser()">FOLLOW</button>
+                <button *ngIf="isProfileOfUser" (click)="this.signOut()">SIGN OUT</button>
             </div>
             <div>
-                <p><b>566</b></p><p>Beiträge</p>
+                <p><b>{{this.countOfUserPosts}}</b></p><p>Beiträge</p>
             </div>
             <div>
-                <p><b>400</b></p><p>Follower</p>
+                <p><b>{{this.followers}}</b></p><p>Follower</p>
             </div>
             <div>
-                <p><b>333</b></p><p>gefolgt</p>
+                <p><b>{{this.following}}</b></p><p>gefolgt</p>
             </div>
             <div class="break"></div>
             <div class="user-posts">

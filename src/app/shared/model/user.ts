@@ -5,6 +5,8 @@ export class CustomUser {
     username!: string;
     email!: string;
     picture_url?: string;
+    followers?: number = 0;
+    following?: number = 0;
 
     constructor(auth: any) {
         this.uid = auth.uid;

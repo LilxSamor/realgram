@@ -1,6 +1,6 @@
 <div class="feed">
     <app-header></app-header>
-    <div class="content-container">
+    <div class="content-container" *ngIf="realPosts">
         <ng-container *ngFor="let post of realPosts">
             <app-user-post [post]="post"></app-user-post>
         </ng-container>

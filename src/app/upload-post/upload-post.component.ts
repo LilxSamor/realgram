@@ -14,6 +14,7 @@ import { map } from 'rxjs';
 import { UploadService } from '../services/upload.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload-post',
@@ -22,6 +23,7 @@ import { MatStepperModule } from '@angular/material/stepper';
   styleUrl: './upload-post.component.css'
 })
 export class UploadPostComponent {
+  router = inject(Router);
   auth = inject(Auth);
   
   private _formBuilder = inject(FormBuilder);
@@ -80,11 +82,11 @@ export class UploadPostComponent {
       } else if (this.selectedFile.type.includes('audio')) {
         this.post.type = Type.Audio;
       }
-      console.log(this.post.url)
     }
 
     this.userPostService.create(this.post).then(() => {
       this.submitted = true;
+      this.router.navigateByUrl('/feed');
     });
   }
 
@@ -107,7 +109,6 @@ export class UploadPostComponent {
         this.fileSrc = reader.result as string;
       }
       this.selectedFile = file;
-      console.log(this.selectedFile.type)
     }
   }
 }

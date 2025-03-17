@@ -11,13 +11,14 @@ import { VideoComponent } from '../shared/video/video.component';
 import { PollComponent } from '../shared/poll/poll.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UserPostDetailsComponent } from '../user-post-details/user-post-details.component';
-import { Auth } from '@angular/fire/auth';
+import { Auth, user } from '@angular/fire/auth';
 import { AuthService } from '../services/auth.service';
 import { CustomUser } from '../shared/model/user';
 import { UserPostService } from '../services/user-post.service';
 import { LikeService } from '../services/like.service';
 import { Like } from '../shared/model/like';
 import { map } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-post',
@@ -28,7 +29,9 @@ import { map } from 'rxjs';
 export class UserPostComponent {
   @Input({ required: true }) post!: Post;
   postTypes = Type;
+
   auth = inject(Auth);
+  router = inject(Router);
   dialog = inject(MatDialog);
 
   currentUser: CustomUser = new CustomUser(this.auth);
@@ -48,16 +51,22 @@ export class UserPostComponent {
     this.authService.getUsername(this.auth.currentUser?.uid!).subscribe(data => {
       if(data) {
         this.currentUser = data;
-        this.getLikes();
+        if(this.post.id) {
+          this.getLikes(this.post.id);
+        }
       }
     });
+  }
+
+  redirectToUserProfile(username: string) {
+    this.router.navigate(['/account', username]);
   }
 
   openDetails() {
     this.dialog.open(UserPostDetailsComponent, { data: this.post });
   }
 
-  getLikes() {
+  getLikes(pid: number) {
     const likes = this.likeService.getAll().snapshotChanges().pipe(
       map(changes => 
         changes.map(c => 
@@ -65,8 +74,8 @@ export class UserPostComponent {
         )
       )
     ).subscribe(likes => {
-      let filteredLikes = likes.filter(a => a.pid === this.post.id);
-      let likeRef = filteredLikes.find(a => a.pid === this.post.id);
+      let filteredLikes = likes.filter(a => a.pid === this.post.id!);
+      let likeRef = filteredLikes.find(a => a.pid === this.post.id!);
       if(likeRef?.username === this.currentUser.username) {
         this.likedByUser = true;
       }

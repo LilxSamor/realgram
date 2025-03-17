@@ -1,7 +1,9 @@
 <mat-card class="card" appearance="outlined">
     <mat-card-header>
-        <div mat-card-avatar class="header-image" [ngStyle]="{ background: 'url({{this.profilePictureUrl}}), url(/assets/avatar.png)' }" ></div>
-        <mat-card-title>&#64;{{post.username}}</mat-card-title>
+        <div mat-card-avatar class="header-image" [ngStyle]="{ background: 'url({{this.profilePictureUrl}})' }" >
+            <img class="header-profile-picture" [src]="this.profilePictureUrl" alt="Profile picture"/>
+        </div>
+        <mat-card-title class="username-title" (click)="redirectToUserProfile(post.username)">&#64;{{post.username}}</mat-card-title>
         <mat-card-subtitle>{{post.type}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>

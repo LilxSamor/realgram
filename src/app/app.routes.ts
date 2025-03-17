@@ -7,7 +7,7 @@ import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
-    { path: 'account', component: ProfileComponent, /*canActivate: [AuthGuard]*/ },
+    { path: 'account/:username', component: ProfileComponent, },
     { path: 'feed', component: FeedComponent },
     { path: 'upload', component: UploadPostComponent },
     { path: 'login', component: LoginComponent },

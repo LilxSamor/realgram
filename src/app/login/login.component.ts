@@ -71,7 +71,7 @@ export class LoginComponent {
   selectedFile: any = '';
   fileSrc: string = '';
 
-  constructor(private uploadService: UploadService) {
+  constructor(private uploadService: UploadService, private localStorage: LocalStorageService) {
     this.uid = this.auth.currentUser?.uid;
     merge(this.emailSignup.statusChanges, this.emailSignup.valueChanges).pipe(takeUntilDestroyed()).subscribe(() => this.updateErrorMessage);
   }
@@ -97,13 +97,14 @@ export class LoginComponent {
     this.newUser.email = email;
 
     const fileExtension = this.selectedFile.name.split('.').pop()
-
     this.newUser.picture_url = 'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.newUser.username + '.' + fileExtension;
-    console.log(this.newUser.picture_url);
 
     this.authService.createNewUser(this.newUser).then(() => {
-      this.router.navigateByUrl('/account');
+      // this.router.navigateByUrl('/account');
+      this.router.navigate(['/account', this.newUser.username]);
       this.uploadPfp(this.newUser.username);
+      this.localStorage.setItem('isUserLoggedIn', 'yes');
+      this.localStorage.setItem('currentUsername', this.newUser.username);
     });
   }
 
@@ -122,7 +123,10 @@ export class LoginComponent {
       let userToSignIn = users.find(a => a.username === username);
       this.authService.loginWithPassword(userToSignIn!.email!, password).pipe().subscribe({
         next: (user) => {
-          this.router.navigateByUrl('/account');
+          // this.router.navigateByUrl('/account');
+          this.router.navigate(['/account', username]);
+          this.localStorage.setItem('isUserLoggedIn', 'yes');
+          this.localStorage.setItem('currentUsername', username);
         }
       })
     });

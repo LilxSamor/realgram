@@ -8,6 +8,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFireDatabase, AngularFireList, AngularFireObject } from '@angular/fire/compat/database';
 import { map, switchMap } from 'rxjs/operators';
 import { ref } from '@angular/fire/database';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +24,13 @@ export class AuthService {
 
   currentUser!: CustomUser;
 
-  constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase) {
+  constructor(private afAuth: AngularFireAuth, private db: AngularFireDatabase, private localStorage: LocalStorageService) {
     this.customUserRef = db.list(this.dbPath);
     this.customUserObjRef = db.database.ref(this.dbPath)
+  }
+
+  followUser() {
+
   }
 
   createNewUser(user: CustomUser) {
@@ -67,7 +72,6 @@ export class AuthService {
         .then(response => {
           if (response.user) {
             this.router.navigate(['/account']);
-            // if(this.checkUsername(response.user.uid, ))
           } else {
             console.error('Login failed')
           }
@@ -77,6 +81,7 @@ export class AuthService {
   public async logout() {
       await this.auth.signOut().then(() => {
           this.router.navigate(['/login']);
+          this.localStorage.setItem('isUserLoggedIn', 'no');
       });
   }
 }
