@@ -4,6 +4,7 @@ import { FeedComponent } from './feed/feed.component';
 import { UploadPostComponent } from './upload-post/upload-post.component';
 import { AuthGuard } from './services/auth.guard';
 import { LoginComponent } from './login/login.component';
+import { UserSearchComponent } from './user-search/user-search.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -11,4 +12,5 @@ export const routes: Routes = [
     { path: 'feed', component: FeedComponent },
     { path: 'upload', component: UploadPostComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'search', component: UserSearchComponent },
 ];

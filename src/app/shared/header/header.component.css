@@ -12,3 +12,10 @@
     flex-direction: column;
     overflow-y: auto;
 }
+
+.search-icon {
+    position: fixed;
+    right: 1.4em;
+    top: 1em;
+    transform: scale(1.4);
+}

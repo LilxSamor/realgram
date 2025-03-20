@@ -6,7 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input'
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { AudioPlayerComponent } from '../shared/audio-player/audio-player.component';
 import { Post, Type } from '../shared/model/post';
 import { PhotoComponent } from '../shared/photo/photo.component';
@@ -18,6 +18,7 @@ import { CustomUser } from '../shared/model/user';
 import { Auth } from '@angular/fire/auth';
 import { map } from 'rxjs';
 import { UserComment } from '../shared/model/comment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-post-details',
@@ -27,7 +28,8 @@ import { UserComment } from '../shared/model/comment';
 })
 export class UserPostDetailsComponent {
   auth = inject(Auth);
-  
+  router = inject(Router);
+  dialogRef = inject(MatDialogRef<UserPostDetailsComponent>);
   post = inject(MAT_DIALOG_DATA);
   postTypes = Type;
 
@@ -51,6 +53,11 @@ export class UserPostDetailsComponent {
         this.retrieveComments();
       }
     });
+  }
+
+  redirectToUserProfile(username: string) {
+    this.router.navigate(['/account', username]);
+    this.dialogRef.close();
   }
 
   retrieveComments(): void {

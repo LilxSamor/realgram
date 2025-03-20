@@ -18,7 +18,7 @@
         </p>
         <div class="comment-section">
             <div class="comment" *ngFor="let comment of allComments">
-                <h4>&#64;{{comment.username}}</h4>
+                <h4 (click)="redirectToUserProfile(comment.username)">&#64;{{comment.username}}</h4>
                 <p>&nbsp;{{comment.comment}}</p>
             </div>
         </div>

@@ -1,0 +1,21 @@
+table {
+    width: 100%;
+    background-color: white;
+    padding-bottom: 10em;
+}
+
+.search-field {
+    margin: 2em;
+}
+
+.column-title {
+    color: black;
+}
+
+.header-profile-picture {
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    object-fit: cover;
+    backdrop-filter: blur(6px);
+}
