@@ -13,6 +13,10 @@
     background-image: url('/assets/avatar.png');
 }
 
+.header-image:hover {
+    cursor: pointer;
+}
+
 .header-profile-picture {
     width: 100%;
     height: 100%;

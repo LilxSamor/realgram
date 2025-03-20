@@ -1,4 +1,4 @@
-<mat-card class="card" appearance="outlined">
+<mat-card *ngIf="post" class="card" appearance="outlined">
     <mat-card-header>
         <div mat-card-avatar class="header-image" (click)="redirectToUserProfile(post.username)" [ngStyle]="{ background: 'url({{this.profilePictureUrl}})' }" >
             <img class="header-profile-picture" [src]="this.profilePictureUrl" alt="Profile picture"/>
@@ -19,7 +19,7 @@
         <div class="comment-button">
             <img *ngIf="currentUser.picture_url" class="profile-picture" [src]="currentUser.picture_url" alt="Profile picture"/>
             <img *ngIf="!currentUser.picture_url" class="profile-picture" [src]="'/assets/avatar.png'" alt="Profile picture"/>
-            <button mat-button (click)="openDetails()">ADD COMMENT</button>
+            <button mat-button (click)="openDetails()">Show all comments</button>
         </div>
         <div>
             <button (click)="likePost()" mat-icon-button aria-label="Like this post">

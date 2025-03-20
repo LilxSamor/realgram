@@ -14,10 +14,11 @@ import { CustomUser } from '../shared/model/user';
 import { ActivatedRoute } from '@angular/router';
 import { FollowService } from '../services/follow.service';
 import { Follow } from '../shared/model/follow';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-profile',
-  imports: [NgFor, NgIf, MatDividerModule, MatIconModule, MatTabsModule, UserPostComponent],
+  imports: [NgFor, NgIf, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
   encapsulation: ViewEncapsulation.None
@@ -33,6 +34,7 @@ export class ProfileComponent {
   username?: string = '';
 
   currentUserFollowsShownUser = false;
+  currentUserFollow: any;
   following: number = 0;
   followers: number = 0;
   countOfUserPosts: number = 0;
@@ -81,22 +83,34 @@ export class ProfileComponent {
     ).subscribe(allFollows => {
       let filteredFollowers = allFollows.filter(a => a.username === this.username);
       let filteredFollowing = allFollows.filter(a => a.username_follower === this.username);
-      let currentUserFollow = allFollows.find(a => a.username_follower === this.currentUser.username && a.username === this.username);
+      this.currentUserFollow = allFollows.find(a => a.username_follower === this.currentUser.username && a.username === this.username);
       this.followers = filteredFollowers.length;
       this.following = filteredFollowing.length;
-      if(currentUserFollow) (
+      if(this.currentUserFollow) (
         this.currentUserFollowsShownUser = true
       )
     });
   }
 
   followUser(): void {
-    let newFollow = new Follow();
-    newFollow.username = this.username as string;
-    newFollow.username_follower = this.currentUser.username;
-    this.followService.create(newFollow).then(() => {
-      this.currentUserFollowsShownUser = true;
-    });
+    if(!this.currentUserFollowsShownUser) {
+      let newFollow = new Follow();
+      newFollow.username = this.username as string;
+      newFollow.username_follower = this.currentUser.username;
+      this.followService.create(newFollow).then(() => {
+        this.currentUserFollowsShownUser = true;
+      });
+    }
+  }
+
+  unfollowUser(): void {
+    if(this.currentUserFollowsShownUser) {
+      console.log(this.currentUserFollow.key);
+      this.followService.delete(this.currentUserFollow.key).then(() => {
+        this.currentUserFollowsShownUser = false;
+        this.currentUserFollow = null;
+      });
+    }
   }
 
   retrievePosts(): void {

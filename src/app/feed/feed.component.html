@@ -2,8 +2,11 @@
     <app-header></app-header>
     <div class="content-container" *ngIf="realPosts">
         <ng-container *ngFor="let post of realPosts">
-            <app-user-post [post]="post"></app-user-post>
+            <app-user-post *ngIf="post.id" [post]="post"></app-user-post>
         </ng-container>
+    </div>
+    <div *ngIf="!realPosts">
+        <mat-spinner></mat-spinner>
     </div>
     <div class="footer-placeholder"></div>
 </div>

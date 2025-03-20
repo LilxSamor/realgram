@@ -12,10 +12,26 @@ table {
     color: black;
 }
 
+.username {
+    width: fit-content;
+}
+
+.username:hover {
+    cursor: pointer;
+}
+
+.avatar-column {
+    width: 4em;
+}
+
 .header-profile-picture {
     width: 2em;
     height: 2em;
     border-radius: 50%;
     object-fit: cover;
     backdrop-filter: blur(6px);
+}
+
+.header-profile-picture:hover {
+    cursor: pointer;
 }

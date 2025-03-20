@@ -1,4 +1,4 @@
-import { Component, inject, Input, input } from '@angular/core';
+import { Component, inject, Input, input, SimpleChanges } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,7 +27,7 @@ import { Router } from '@angular/router';
   styleUrl: './user-post.component.css'
 })
 export class UserPostComponent {
-  @Input({ required: true }) post!: Post;
+  @Input({ required: true }) post!: any;
   postTypes = Type;
 
   auth = inject(Auth);
@@ -40,18 +40,19 @@ export class UserPostComponent {
 
   like: Like = new Like();
   likedByUser = false;
-  allLikes: Like[] = [];
+  allLikes: any[] = [];
   countOfAllLikes = 0;
 
   ngOnInit() {
     this.profilePictureUrl = 'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.post.username + '.jpg';
+    this.getLikes(this.post.id);
   }
 
   constructor(private authService: AuthService, private likeService: LikeService, private userPostService: UserPostService) {
     this.authService.getUsername(this.auth.currentUser?.uid!).subscribe(data => {
       if(data) {
         this.currentUser = data;
-        if(this.post.id) {
+        if(this.post) {
           this.getLikes(this.post.id);
         }
       }
@@ -87,11 +88,12 @@ export class UserPostComponent {
   likePost() {
     if(this.likedByUser == true) {
       let likeRef = this.allLikes.find(a => a.pid === this.post.id);
-      /*this.likeService.delete(likeRef!.key!).then(() => {
-        this.likedByUser = false;
-      });*/
+      if(likeRef.key != undefined || '') {
+        this.likeService.delete(likeRef.key).then(() => {
+          this.likedByUser = false;
+        });
+      }
     } else {
-      this.like.key = '';
       this.like.username = this.currentUser.username;
       this.like.pid = this.post.id;
   
@@ -102,6 +104,8 @@ export class UserPostComponent {
   }
 
   deletePost() {
-    // this.userPostService.delete(this.post.key!);
+    if(this.post.key != undefined || '') {
+      this.userPostService.delete(this.post.key);
+    }
   }
 }

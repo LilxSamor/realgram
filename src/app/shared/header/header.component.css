@@ -19,3 +19,7 @@
     top: 1em;
     transform: scale(1.4);
 }
+
+.search-icon:hover {
+    cursor: pointer;
+}

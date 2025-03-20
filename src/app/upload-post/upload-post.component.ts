@@ -71,7 +71,7 @@ export class UploadPostComponent {
     this.post.username = this.username;
     this.post.type = Type.Text;
     this.post.url = '';
-    this.post.key = '';
+    // this.post.key = '';
     if(this.selectedFile) {
       this.uploadFile();
       this.post.url = 'https://s3.us-east-1.amazonaws.com/real.gram/' + this.selectedFile.name;

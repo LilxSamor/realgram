@@ -2,15 +2,17 @@ import { Component } from '@angular/core';
 import { NgFor, NgIf } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { UserPostComponent } from '../user-post/user-post.component';
 import { Post } from '../shared/model/post';
 import { UserPostService } from '../services/user-post.service';
 import { map } from 'rxjs/operators';
 import { HeaderComponent } from "../shared/header/header.component";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
-  imports: [NgFor, NgIf, MatCardModule, MatButtonModule, UserPostComponent, HeaderComponent],
+  imports: [NgFor, NgIf, MatCardModule, MatButtonModule, MatProgressSpinnerModule, UserPostComponent, HeaderComponent],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css'
 })

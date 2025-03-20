@@ -17,16 +17,7 @@ export class NavigationComponent {
   uid?: string;
   username?: string;
 
-  constructor(private authService: AuthService, private localStorage: LocalStorageService, private router: Router) {
-    /*
-    this.uid = this.auth.currentUser?.uid;
-    this.authService.getUsername(this.uid!).subscribe(data => {
-      if(data) {
-        this.username = data['username'];
-        console.log(data)
-      }
-    });*/
-  }
+  constructor(private authService: AuthService, private localStorage: LocalStorageService, private router: Router) {}
 
   redirectToUserProfile() {
     this.username = this.localStorage.getItem('currentUsername') as string;

@@ -154,7 +154,6 @@ export class LoginComponent {
         this.fileSrc = reader.result as string;
       }
       this.selectedFile = file;
-      console.log(this.selectedFile.type)
     }
   }
 

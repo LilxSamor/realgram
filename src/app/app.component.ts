@@ -27,6 +27,5 @@ export class AppComponent {
     if(!this.isUserLoggedIn) {
       this.router.navigateByUrl('/login');
     }
-    console.log(this.isUserLoggedIn);
   }
 }
