@@ -7,7 +7,7 @@
                 <p>lorem ipsum dies das ananas...</p>
                 <button mat-button *ngIf="!isProfileOfUser && !currentUserFollowsShownUser" (click)="this.followUser()">FOLLOW</button>
                 <button mat-button *ngIf="!isProfileOfUser && currentUserFollowsShownUser" (click)="this.unfollowUser()">UNFOLLOW</button>
-                <button *ngIf="isProfileOfUser" (click)="this.signOut()">SIGN OUT</button>
+                <button mat-button *ngIf="isProfileOfUser" (click)="this.signOut()">SIGN OUT</button>
             </div>
             <div>
                 <p><b>{{this.countOfUserPosts}}</b></p><p>Beiträge</p>
