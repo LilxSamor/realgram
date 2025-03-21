@@ -4,6 +4,7 @@ export class Post {
     type!: Type;
     url!: string;
     description?: string;
+    pollOptions: PollOption[] = [];
 }
 
 export enum Type {
@@ -12,4 +13,9 @@ export enum Type {
     Video = 'VIDEO', 
     Photo = 'PHOTO', 
     Poll = 'POLL'
+}
+
+export class PollOption {
+    votes: number = 0;
+    optionText!: string;
 }

@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { Post, Type } from '../shared/model/post';
+import { PollOption, Post, Type } from '../shared/model/post';
 import { UserPostService } from '../services/user-post.service';
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { FormBuilder, FormControl, FormsModule, Validators } from '@angular/forms';
@@ -15,10 +15,12 @@ import { UploadService } from '../services/upload.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { MatChipsModule } from '@angular/material/chips';
 
 @Component({
   selector: 'app-upload-post',
-  imports: [ NgIf, FormsModule, MatFormFieldModule, MatStepperModule, MatInputModule, MatButtonModule ],
+  imports: [ NgIf, FormsModule, MatFormFieldModule, MatStepperModule, MatInputModule, MatButtonModule, MatIconModule, MatChipsModule ],
   templateUrl: './upload-post.component.html',
   styleUrl: './upload-post.component.css'
 })
@@ -36,6 +38,10 @@ export class UploadPostComponent {
 
   post: Post = new Post();
   submitted = false;
+  isTypePoll = false;
+
+  pollOptions: PollOption[] = [];
+  pollOptionInput = '';
 
   currentUser: CustomUser = new CustomUser(this.auth);
   uid?: string = '';
@@ -69,9 +75,9 @@ export class UploadPostComponent {
   savePost(): void {
     this.generateId();
     this.post.username = this.username;
-    this.post.type = Type.Text;
     this.post.url = '';
-    // this.post.key = '';
+    this.post.pollOptions = this.pollOptions;
+
     if(this.selectedFile) {
       this.uploadFile();
       this.post.url = 'https://s3.us-east-1.amazonaws.com/real.gram/' + this.selectedFile.name;
@@ -81,7 +87,11 @@ export class UploadPostComponent {
         this.post.type = Type.Photo;
       } else if (this.selectedFile.type.includes('audio')) {
         this.post.type = Type.Audio;
-      }
+      } 
+    } else if(this.pollOptions.length>0) {
+      this.post.type = Type.Poll;
+    } else {
+      this.post.type = Type.Text;
     }
 
     this.userPostService.create(this.post).then(() => {
@@ -93,6 +103,19 @@ export class UploadPostComponent {
   newPost(): void {
     this.submitted = false;
     this.post = new Post();
+  }
+
+  newPollOption(optionText: string): void {
+    if(this.pollOptionInput != '') {
+      let pollOption = new PollOption();
+      pollOption.optionText = optionText;
+      this.pollOptions.push(pollOption);
+      this.pollOptionInput = '';
+    }
+  }
+
+  removePollOption(optionText: string): void {
+    this.pollOptions = this.pollOptions.filter(option => option.optionText !== optionText);
   }
 
   uploadFile(): void {

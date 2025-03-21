@@ -2,10 +2,23 @@
     <div *ngIf="!submitted">
         <mat-stepper class="stepper" orientation="vertical" [linear]="false" #stepper>
             <mat-step>
+                <ng-template matStepLabel>Select type of post</ng-template>
+                <button type="button" mat-fab extended (click)="isTypePoll=false" matStepperNext>
+                    <mat-icon>image</mat-icon>
+                    Post
+                </button>
+                <button type="button" mat-fab extended style="margin-left: 2rem;" (click)="isTypePoll=true" matStepperNext>
+                    <mat-icon>ballot</mat-icon>
+                    Poll
+                </button>
+            </mat-step>
+            <mat-step>
                 <form>
-                    <ng-template matStepLabel>Describe your post</ng-template>
+                    <ng-template *ngIf="!isTypePoll" matStepLabel>Describe your post</ng-template>
+                    <ng-template *ngIf="isTypePoll" matStepLabel>Type in your poll question</ng-template>
                     <mat-form-field>
-                        <mat-label>Description</mat-label>
+                        <mat-label *ngIf="!isTypePoll">Description</mat-label>
+                        <mat-label *ngIf="isTypePoll">Question</mat-label>
                         <input matInput type="text" class="form-control" id="description" required [(ngModel)]="post.description" name="description"/>
                     </mat-form-field>
                     <div>
@@ -13,7 +26,30 @@
                     </div>
                 </form>
             </mat-step>
-            <mat-step>
+            <mat-step *ngIf="isTypePoll">
+                <ng-template matStepLabel>Add poll options</ng-template>
+                <mat-form-field>
+                    <mat-label>Poll option</mat-label>
+                    <input #pollOptionId matInput class="form-control" [(ngModel)]="pollOptionInput"/>
+                    <button mat-button (click)="newPollOption(pollOptionId.value)">add</button>
+                </mat-form-field>
+                <div *ngIf="this.pollOptions.length>0">
+                    <mat-chip-set>
+                    @for (pollOption of this.pollOptions; track pollOption) {
+                        <mat-chip-row (removed)="removePollOption(pollOption.optionText)">
+                            {{pollOption.optionText}}
+                            <button matChipRemove aria-label="'remove poll option">
+                                <mat-icon>cancel</mat-icon>
+                            </button>
+                        </mat-chip-row>
+                    }
+                    </mat-chip-set>
+                </div>
+                <div>
+                    <button mat-button matStepperNext>Next</button>
+                </div>
+            </mat-step>
+            <mat-step *ngIf="!isTypePoll">
                 <form>
                     <ng-template matStepLabel>Upload a photo, video or audio</ng-template>
                     <button type="button" mat-button (click)="fileInput.click()">Choose file</button>

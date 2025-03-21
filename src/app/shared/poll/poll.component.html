@@ -1,5 +1,5 @@
 <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Poll">
-    @for (option of mockPollOptions; track option) {
-      <mat-chip-option>{{option}}</mat-chip-option>
+    @for (pollOption of this.post.pollOptions; track pollOption) {
+      <mat-chip-option style="--mdc-chip-label-text-color: black;">{{pollOption.optionText}}</mat-chip-option>
     }
 </mat-chip-listbox>

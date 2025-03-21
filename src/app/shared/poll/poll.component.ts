@@ -11,5 +11,4 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class PollComponent {
   @Input({ required: true }) post!: Post;
-  readonly mockPollOptions: string[] = ['Bern', 'Zürich'];
 }
