@@ -14,6 +14,10 @@ export class UserPostService {
     this.userPostsRef = db.list(this.dbPath);
   }
 
+  vote(id: number, optionIndex: number) {
+    
+  }
+
   getAll(): AngularFireList<Post> {
     return this.userPostsRef;
   }
