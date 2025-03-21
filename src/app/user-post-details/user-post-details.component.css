@@ -5,7 +5,7 @@ h4, h3, p {
 .card {
     background-color: white;
     padding: 2rem;
-    width: 50rem;
+    /*width: 50rem;*/
 }
 
 .card-content {
@@ -21,8 +21,28 @@ h4, h3, p {
     background: none;
 }
 
+.header {
+    display: flex;
+}
+
+.header-title {
+    display: block;
+}
+
 .header-image {
     background-image: url('/assets/avatar.png');
+}
+
+.header-image:hover {
+    cursor: pointer;
+}
+
+.header-profile-picture {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    backdrop-filter: blur(6px);
 }
 
 .profile-picture {
@@ -30,6 +50,11 @@ h4, h3, p {
     height: 2rem;
     border-radius: 50%;
     object-fit: cover;
+}
+
+.comment-form {
+    padding-left: 2em;
+    width: 22rem;
 }
 
 .comment-section {
@@ -50,4 +75,36 @@ h4, h3, p {
 .comment > h4, p {
     margin: 0;
     display: inline;
+}
+
+.comment > h4:hover {
+    cursor: pointer;
+}
+
+.send-comment-icon:hover {
+    color: #00dddd;
+}
+
+.send-comment-icon:hover {
+    cursor: pointer;
+}
+
+.favorite-icon {
+    color: palevioletred;
+}
+
+.liked {
+    color: crimson;
+}
+
+.countOfAllLikes {
+    display: inline;
+    position: absolute;
+    font-size: 0.8em;
+    margin: 0;
+    bottom: 2rem;
+}
+
+.mat-badge-content {
+    background: none;
 }

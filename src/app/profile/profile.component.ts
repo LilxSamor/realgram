@@ -15,10 +15,11 @@ import { ActivatedRoute } from '@angular/router';
 import { FollowService } from '../services/follow.service';
 import { Follow } from '../shared/model/follow';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-profile',
-  imports: [NgFor, NgIf, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent],
+  imports: [NgFor, NgIf, MatButtonModule, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
   encapsulation: ViewEncapsulation.None
@@ -105,7 +106,6 @@ export class ProfileComponent {
 
   unfollowUser(): void {
     if(this.currentUserFollowsShownUser) {
-      console.log(this.currentUserFollow.key);
       this.followService.delete(this.currentUserFollow.key).then(() => {
         this.currentUserFollowsShownUser = false;
         this.currentUserFollow = null;

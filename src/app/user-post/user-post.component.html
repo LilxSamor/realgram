@@ -19,7 +19,7 @@
         <div class="comment-button">
             <img *ngIf="currentUser.picture_url" class="profile-picture" [src]="currentUser.picture_url" alt="Profile picture"/>
             <img *ngIf="!currentUser.picture_url" class="profile-picture" [src]="'/assets/avatar.png'" alt="Profile picture"/>
-            <button mat-button (click)="openDetails()">Show all comments</button>
+            <button mat-button (click)="openDetails()">Show all comments...</button>
         </div>
         <div>
             <button (click)="likePost()" mat-icon-button aria-label="Like this post">
