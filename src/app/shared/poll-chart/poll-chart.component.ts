@@ -34,9 +34,6 @@ export class PollChartComponent {
       votes.push(pollOption.votes);
     });
 
-    console.log(pollOptions);
-    console.log(votes);
-
     this.chart = new Chart(this.chartName, {
       type: 'doughnut',
       data: {

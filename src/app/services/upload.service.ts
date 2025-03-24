@@ -19,8 +19,8 @@ export class UploadService {
     },
   });
 
-  async uploadPfp(file: File, username: string) {
-    const fileExtension = file.name.split('.').pop()
+  async uploadPfp(file: File, fileName: string, username: string) {
+    const fileExtension = fileName.split('.').pop()
 
     const s3 = new S3Client({
       region: 'us-east-1',

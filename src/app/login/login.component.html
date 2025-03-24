@@ -107,6 +107,17 @@
                         <ng-template matStepLabel>Upload your profile picture</ng-template>
                         <button type="button" mat-button (click)="fileInput.click()">Choose file</button>
                         <input #fileInput hidden type="file" (change)="selectFile($event)" /><br />
+                        <image-cropper [ngStyle]="!this.alreadySelectedFile ? {'display': 'none'} : {'display': 'flex'}"
+                            [imageChangedEvent]="imageChangedEvent"
+                            [maintainAspectRatio]="true"
+                            [aspectRatio]="4 / 3"
+                            [resizeToWidth]="128"
+                            format="jpeg"
+                            (imageCropped)="imageCropped($event)"
+                            (imageLoaded)="imageLoaded($event)"
+                            (cropperReady)="cropperReady()"
+                            (loadImageFailed)="loadImageFailed()"
+                        ></image-cropper>
                         <div>
                             <button mat-button matStepperPrevious>Back</button>
                             <button mat-button matStepperNext>Next</button>

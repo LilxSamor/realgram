@@ -15,11 +15,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { UploadService } from '../services/upload.service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
+import { ImageCropperComponent, ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FilterRuleName } from '@aws-sdk/client-s3';
 
 @Component({
   selector: 'app-login',
   providers: [CommonModule],
-  imports: [CommonModule, MatTabsModule, MatButtonModule, MatStepperModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MatIconModule],
+  imports: [CommonModule, MatTabsModule, MatButtonModule, MatStepperModule, MatFormFieldModule, MatInputModule, FormsModule, ReactiveFormsModule, MatIconModule, ImageCropperComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -68,12 +71,39 @@ export class LoginComponent {
 
   newUser: CustomUser = new CustomUser(this.auth);
 
+  alreadySelectedFile = false;
   selectedFile: any = '';
   fileSrc: string = '';
+  originalFileName: string = '';
 
-  constructor(private uploadService: UploadService, private localStorage: LocalStorageService) {
+  imageChangedEvent: any = '';
+  croppedImage: any  = '';
+
+  constructor(private uploadService: UploadService, private localStorage: LocalStorageService, private sanitizer: DomSanitizer) {
     this.uid = this.auth.currentUser?.uid;
     merge(this.emailSignup.statusChanges, this.emailSignup.valueChanges).pipe(takeUntilDestroyed()).subscribe(() => this.updateErrorMessage);
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.blob;
+    const reader = new FileReader();
+    reader.readAsDataURL(this.croppedImage);
+    reader.onload = () => {
+      this.fileSrc = reader.result as string;
+      this.selectedFile = this.croppedImage;
+    }
+  }
+
+  imageLoaded(image: LoadedImage) {
+    // show cropper
+  }
+
+  cropperReady() {
+      // cropper ready
+  }
+
+  loadImageFailed() {
+      // show message
   }
 
   clickEvent(event: MouseEvent) {
@@ -96,7 +126,7 @@ export class LoginComponent {
     this.newUser.username = username.toLowerCase();
     this.newUser.email = email;
 
-    const fileExtension = this.selectedFile.name.split('.').pop()
+    const fileExtension = this.originalFileName.split('.').pop();
     this.newUser.picture_url = 'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.newUser.username + '.' + fileExtension;
 
     this.authService.createNewUser(this.newUser).then(() => {
@@ -142,18 +172,15 @@ export class LoginComponent {
 
   uploadPfp(username: string): void {
     const file = this.selectedFile;
-    this.uploadService.uploadPfp(file, username);
+    this.uploadService.uploadPfp(file, this.originalFileName, username);
   }
 
   selectFile(event: any) {
-    const reader = new FileReader();
+    this.alreadySelectedFile = true;
+    this.imageChangedEvent = event;
     if(event.target.files && event.target.files.length) {
       const [file] = event.target.files;
-      reader.readAsDataURL(file);
-      reader.onload = () => {
-        this.fileSrc = reader.result as string;
-      }
-      this.selectedFile = file;
+      this.originalFileName = file.name;
     }
   }
 

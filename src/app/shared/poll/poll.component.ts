@@ -28,7 +28,6 @@ export class PollComponent {
 
   ngOnInit() {
     this.alreadyVoted = this.checkIfUserVoted();
-    console.log(this.alreadyVoted);
   }
 
   checkIfUserVoted(): boolean {
@@ -45,16 +44,12 @@ export class PollComponent {
       pollOption.votes=pollOption.votes+1;
       this.post.usersWhoVoted.push(this.auth.currentUser!.uid);
       this.updatePollOptions();
-      console.log(pollOption);
-      console.log($event);
     } else if(!this.post.usersWhoVoted) {
       this.selectedPollOption = pollOption;
       pollOption.votes=pollOption.votes+1;
       let usersWhoVotedRef = [this.auth.currentUser!.uid];
       this.post.usersWhoVoted = usersWhoVotedRef;
       this.updatePollOptions();
-      console.log(pollOption);
-      console.log($event);
     }
   }
 
