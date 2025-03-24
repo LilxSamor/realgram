@@ -1,3 +1,5 @@
+import { CustomUser } from "./user";
+
 export class Post {
     id!: number;
     username!: string;
@@ -5,6 +7,7 @@ export class Post {
     url!: string;
     description?: string;
     pollOptions: PollOption[] = [];
+    usersWhoVoted: string[] = [];
 }
 
 export enum Type {
