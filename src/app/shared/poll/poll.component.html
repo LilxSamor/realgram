@@ -3,6 +3,6 @@
       <mat-chip-option style="--mdc-chip-label-text-color: black;" (selectionChange)="changeSelected($event, pollOption)">{{pollOption.optionText}}</mat-chip-option>
     }
 </mat-chip-listbox>
-<app-poll-chart [post]="this.post" [chartName]="this.post.key" *ngIf="this.alreadyVoted && this.post">
+<app-poll-chart [post]="this.post" [chartName]="this.chartName" *ngIf="this.alreadyVoted && this.post">
 
 </app-poll-chart>

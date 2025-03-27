@@ -1,5 +1,5 @@
 import { NgClass, NgFor, NgIf } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input } from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -53,7 +53,9 @@ export class UserPostDetailsComponent {
   allLikes: any[] = [];
   countOfAllLikes = 0;
 
-  constructor(private commentService: CommentService, private authService: AuthService, private userPostService: UserPostService, private likeService: LikeService) {
+  constructor(private commentService: CommentService, private authService: AuthService, 
+    private userPostService: UserPostService, private likeService: LikeService,
+    private changeDetector: ChangeDetectorRef) {
     this.uid = this.auth.currentUser?.uid;
     this.authService.getUsername(this.uid!).subscribe(data => {
       if(data) {
@@ -66,7 +68,12 @@ export class UserPostDetailsComponent {
   }
 
   ngOnInit() {
+    // this.getLikes(this.post.id);
+  }
+
+  ngAfterViewInit() {
     this.getLikes(this.post.id);
+    this.changeDetector.detectChanges()
   }
 
   redirectToUserProfile(username: string) {

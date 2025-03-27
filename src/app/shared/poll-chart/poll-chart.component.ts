@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { PollOption } from '../model/post';
 
@@ -13,8 +13,11 @@ export class PollChartComponent {
   @Input({ required: true }) chartName!: string;
   chart: any;
 
+  constructor(private changeDetector: ChangeDetectorRef) {}
+
   ngAfterViewInit() {
     this.createChart();
+    this.changeDetector.detectChanges();
   }
 
   createChart() {
