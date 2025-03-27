@@ -17,25 +17,16 @@ import { PollChartComponent } from "../poll-chart/poll-chart.component";
 })
 export class PollComponent {
   @Input({ required: true }) post!: any;
-  @Input({ required: true }) isDetailComponent!: boolean;
   selectedPollOption: PollOption | undefined = new PollOption();
 
   auth = inject(Auth);
 
   alreadyVoted = false;
 
-  chartName = '';
-
-  constructor(private userPostService: UserPostService) {
-  }
+  constructor(private userPostService: UserPostService) {}
 
   ngOnInit() {
     this.alreadyVoted = this.checkIfUserVoted();
-    if(this.isDetailComponent) {
-      this.chartName = this.post.key + 'details';
-    } else {
-      this.chartName = this.post.key;
-    }
   }
 
   checkIfUserVoted(): boolean {

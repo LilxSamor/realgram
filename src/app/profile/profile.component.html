@@ -27,7 +27,7 @@
                   </ng-template>
                   <div class="content-container">
                     <ng-container *ngFor="let post of realPosts">
-                      <app-user-post [post]="post"></app-user-post>
+                      <app-user-post [post]="post" [isUserProfile]="true"></app-user-post>
                     </ng-container>
                   </div>
                   <div class="footer-placeholder"></div>

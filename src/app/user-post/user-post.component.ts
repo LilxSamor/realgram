@@ -1,4 +1,4 @@
-import { Component, inject, Input, input, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, Input, input, SimpleChanges } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,6 +28,7 @@ import { Router } from '@angular/router';
 })
 export class UserPostComponent {
   @Input({ required: true }) post!: any;
+  @Input({ required: true }) isUserProfile!: boolean;
   postTypes = Type;
 
   auth = inject(Auth);
@@ -43,12 +44,7 @@ export class UserPostComponent {
   allLikes: any[] = [];
   countOfAllLikes = 0;
 
-  ngOnInit() {
-    this.profilePictureUrl = 'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.post.username + '.jpg';
-    this.getLikes(this.post.id);
-  }
-
-  constructor(private authService: AuthService, private likeService: LikeService, private userPostService: UserPostService) {
+  constructor(private authService: AuthService, private likeService: LikeService, private userPostService: UserPostService, private changeDetector: ChangeDetectorRef) {
     this.authService.getUsername(this.auth.currentUser?.uid!).subscribe(data => {
       if(data) {
         this.currentUser = data;
@@ -57,6 +53,16 @@ export class UserPostComponent {
         }
       }
     });
+  }
+
+  ngOnInit() {
+    this.profilePictureUrl = 'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.post.username + '.jpg';
+    this.getLikes(this.post.id);
+  }
+
+  ngAfterViewInit() {
+    this.getLikes(this.post.id);
+    this.changeDetector.detectChanges()
   }
 
   redirectToUserProfile(username: string) {

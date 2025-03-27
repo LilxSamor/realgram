@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js/auto';
 import { PollOption } from '../model/post';
 
@@ -10,7 +10,7 @@ import { PollOption } from '../model/post';
 })
 export class PollChartComponent {
   @Input({ required: true }) post!: any;
-  @Input({ required: true }) chartName!: string;
+  @ViewChild('chartCanvasElement') chartCanvasElement!: ElementRef<HTMLCanvasElement>;
   chart: any;
 
   constructor(private changeDetector: ChangeDetectorRef) {}
@@ -21,10 +21,7 @@ export class PollChartComponent {
   }
 
   createChart() {
-    let chartExist = Chart.getChart(this.chartName);
-    if (chartExist != undefined) {
-      chartExist.destroy();
-    }
+    const ctx = this.chartCanvasElement.nativeElement.getContext('2d');
 
     let pollOptions: string[] = [];
     let votes: number[] = [];
@@ -37,7 +34,7 @@ export class PollChartComponent {
       votes.push(pollOption.votes);
     });
 
-    this.chart = new Chart(this.chartName, {
+    this.chart = new Chart(ctx!, {
       type: 'doughnut',
       data: {
         labels: pollOptions,
