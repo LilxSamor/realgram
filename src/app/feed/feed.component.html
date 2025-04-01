@@ -2,7 +2,8 @@
     <app-header></app-header>
     <div class="content-container" *ngIf="realPosts">
         <ng-container *ngFor="let post of realPosts">
-            <app-user-post *ngIf="post.id" [post]="post"></app-user-post>
+            <app-user-post *ngIf="post.id && !post.weather_icon" [post]="post"></app-user-post>
+            <app-user-post *ngIf="post.id && post.weather_icon" [post]="post" [weatherIcon]="post.weather_icon"></app-user-post>
         </ng-container>
     </div>
     <div *ngIf="!realPosts">
