@@ -1,11 +1,12 @@
 <div class="feed">
     <app-header></app-header>
-    <div class="content-container" *ngIf="posts">
+    <div class="content-container" *ngIf="posts.length > 0">
         <ng-container *ngFor="let post of posts">
-            <app-user-post *ngIf="post.id" [post]="post" [isNews]="true"></app-user-post>
+            <app-user-post [post]="post" [isNews]="true"></app-user-post>
         </ng-container>
     </div>
-    <div *ngIf="!posts">
+    <div *ngIf="posts.length === 0">
+        No news available
     </div>
     <div class="footer-placeholder"></div>
 </div>

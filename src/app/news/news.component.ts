@@ -17,8 +17,11 @@ export class NewsComponent {
 
   constructor(private newsService: NewsService) {}
 
+  ngOnInit() {
+    this.fetchNews();
+  }
+
   createPosts() {
-    const posts: Post[] = [];
     this.articles.forEach((article: any, index: number) => {
       if(!this.posts.includes(article.title)) {
         let post = new Post();
@@ -29,20 +32,16 @@ export class NewsComponent {
         post.url = article.image;
         post.news_source = article.source;
         post.news_published_at = article.published_at;
-        posts.push(post);
+        this.posts.push(post);
       }
     });
-    this.removeDuplicates(posts);
-  }
-
-  removeDuplicates(posts: Post[]) {
-    const titles = new Set();
-    this.posts = posts.filter(({ news_title }) => !titles.has(news_title) && titles.add(news_title));
+    console.log(this.posts);
   }
 
   fetchNews() {
-    this.newsService.getNews().subscribe(data => {
-      this.articles = data.data;
+    this.newsService.getLatestNews().subscribe(data => {
+      console.log(data);
+      this.articles = data;
       this.createPosts();
     });
   }

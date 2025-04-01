@@ -7,17 +7,35 @@ import { catchError, from, map, Observable, of, switchMap } from 'rxjs';
   providedIn: 'root'
 })
 export class NewsService {
-  private apiKey: string = '0441bd2be9658481fb6abe1bce4fbc38';
-  private baseUrl: string = 'http://api.mediastack.com/v1/news';
-  private lastFetchDateKey: string = 'lastFetchDate';
+  // private apiKey: string = '0441bd2be9658481fb6abe1bce4fbc38';
+  private apiUrl: string = 'https://dk57mywfzc.execute-api.us-east-1.amazonaws.com/prod/news';
 
   private newsPath: string = 'news/cachedNews';
-  private cachedNewsRef!: AngularFireList<any>;
+  private cachedNewsPosts!: AngularFireList<any>;
 
   constructor(private http: HttpClient, private db: AngularFireDatabase) {
-    this.cachedNewsRef = db.list(this.newsPath);
+    //this.cachedNewsPosts = db.list(this.newsPath);
   }
 
+  getLatestNews() {
+    return this.http.get<any>(this.apiUrl);
+  }
+
+  /*
+  getNews(): Observable<any[]> {
+    return this.cachedNewsPosts.snapshotChanges().pipe(
+      map(changes =>
+        changes.map(c => ({
+          key: c.payload.key,
+          ...c.payload.val(),
+        }))
+      ),
+      map(articles => articles.slice(0, 3) // Limit to 3 articles
+      )
+    );
+  }*/
+
+  /*
   private getLastFetchDate() {
     const lastFetch = localStorage.getItem(this.lastFetchDateKey);
     return lastFetch ? new Date(lastFetch) : new Date(0);
@@ -67,5 +85,5 @@ export class NewsService {
 
   private getCachedNews(): AngularFireList<any> {
     return this.cachedNewsRef;
-  }
+  }*/
 }
