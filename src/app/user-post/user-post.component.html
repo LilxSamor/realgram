@@ -1,13 +1,16 @@
 <mat-card *ngIf="post" class="card" appearance="outlined">
     <mat-card-header>
         <div mat-card-avatar class="header-image" (click)="redirectToUserProfile(post.username)" [ngStyle]="{ background: 'url({{this.profilePictureUrl}})' }" >
-            <img class="header-profile-picture" [src]="this.profilePictureUrl" alt="Profile picture"/>
+            <img class="header-profile-picture" *ngIf="!this.isNews && !this.weatherIcon" [src]="this.profilePictureUrl" alt="Profile picture"/>
+            <img class="header-profile-picture" *ngIf="this.isNews" [src]="'/assets/news.jpg'" alt="Profile picture"/>
+            <img class="header-profile-picture" *ngIf="this.weatherIcon" [src]="this.weatherIcon" alt="Weather icon"/>
         </div>
-        <mat-card-title class="username-title" (click)="redirectToUserProfile(post.username)">&#64;{{post.username}}</mat-card-title>
-        <mat-card-subtitle>{{post.type}}</mat-card-subtitle>
+        <mat-card-title *ngIf="!this.isNews" class="username-title" (click)="redirectToUserProfile(post.username)">&#64;{{post.username}}</mat-card-title>
+        <mat-card-title *ngIf="this.isNews" class="username-title">{{post.news_title}}</mat-card-title>
+        <mat-card-subtitle *ngIf="!this.isNews && this.weatherIcon===''">{{post.type}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo"></app-photo>
+        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo && post.url != null"></app-photo>
         <app-video [post]="post" *ngIf="post.type===postTypes.Video"></app-video>
         <app-audio-player [post]="post" *ngIf="post.type===postTypes.Audio"></app-audio-player>
         <app-poll [post]="post" *ngIf="post.type===postTypes.Poll"></app-poll>
@@ -21,7 +24,7 @@
             <img *ngIf="!currentUser.picture_url" class="profile-picture" [src]="'/assets/avatar.png'" alt="Profile picture"/>
             <button mat-button style="--mdc-text-button-label-text-color: black;" (click)="openDetails()">Show all comments...</button>
         </div>
-        <div>
+        <div *ngIf="!isNews">
             <button (click)="likePost()" mat-icon-button aria-label="Like this post">
                 <mat-icon [ngClass]="{'liked': likedByUser}" class="favorite-icon">favorite</mat-icon>
                 <div class="countOfAllLikes" *ngIf="this.countOfAllLikes>0" [matBadge]="this.countOfAllLikes" [matBadgeSize]="'medium'" [matBadgePosition]="'before'"></div>

@@ -8,7 +8,7 @@ import { Post } from '../shared/model/post';
 import { UserPostService } from '../services/user-post.service';
 import { map } from 'rxjs/operators';
 import { HeaderComponent } from "../shared/header/header.component";
-import { Observable } from 'rxjs';
+import { NewsService } from '../services/news.service';
 
 @Component({
   selector: 'app-feed',
@@ -18,11 +18,20 @@ import { Observable } from 'rxjs';
 })
 export class FeedComponent {
   realPosts: Post[] = [];
+  articles: any;
 
-  constructor(private userPostService: UserPostService) {}
+  constructor(private userPostService: UserPostService, private newsService: NewsService) {}
 
   ngOnInit(): void {
     this.retrievePosts();
+    // this.fetchNews();
+  }
+
+  fetchNews() {
+    this.newsService.getNews().subscribe(data => {
+      this.articles = data.data;
+      console.log(this.articles);
+    });
   }
 
   retrievePosts(): void {

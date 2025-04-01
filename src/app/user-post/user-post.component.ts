@@ -28,7 +28,8 @@ import { Router } from '@angular/router';
 })
 export class UserPostComponent {
   @Input({ required: true }) post!: any;
-  @Input({ required: true }) isUserProfile!: boolean;
+  @Input() isNews: boolean = false;
+  @Input() weatherIcon: string = '';
   postTypes = Type;
 
   auth = inject(Auth);

@@ -5,6 +5,10 @@ export class Post {
     username!: string;
     type!: Type;
     url!: string;
+    news_title: string = '';
+    news_source: string = '';
+    news_published_at: string = '';
+    weather_icon: string = '';
     description?: string;
     pollOptions: PollOption[] = [];
     usersWhoVoted: string[] = [];

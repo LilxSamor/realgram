@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { Post } from '../model/post';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-photo',

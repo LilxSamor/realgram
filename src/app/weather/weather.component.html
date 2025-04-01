@@ -1,0 +1,11 @@
+<div class="feed">
+    <app-header></app-header>
+    <div class="content-container" *ngIf="this.weatherReports">
+        <ng-container *ngFor="let post of posts">
+            <app-user-post *ngIf="post.id" [post]="post" [weatherIcon]="post.weather_icon"></app-user-post>
+        </ng-container>
+    </div>
+    <div *ngIf="!posts">
+    </div>
+    <div class="footer-placeholder"></div>
+</div>

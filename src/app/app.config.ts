@@ -2,55 +2,43 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getDatabase, provideDatabase } from '@angular/fire/database';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { FIREBASE_OPTIONS } from '@angular/fire/compat';
-import { environment } from '../environments/environment';
-import { UserPostService } from './services/user-post.service';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { authConfig } from './auth/auth.config';
 import { provideAuth as provideAuth_alias } from 'angular-auth-oidc-client';
 import { provideHttpClient } from '@angular/common/http';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDXb195ky45HzIbUZSvPP9K6b66v9y5iAE",
-  authDomain: "test-1eded.firebaseapp.com",
-  projectId: "test-1eded",
-  storageBucket: "test-1eded.firebasestorage.app",
-  messagingSenderId: "7885630519",
-  appId: "1:7885630519:web:2ebc98afa61dd3fbcae3b2",
-  measurementId: "G-SLPQBDPKSS",
-  databaseURL: 'https://test-1eded-default-rtdb.europe-west1.firebasedatabase.app'
+  apiKey: "AIzaSyBpu2gvUIBbAtQ3X8Jfq1iykjvN_XITV6A",
+  authDomain: "realgram-second.firebaseapp.com",
+  projectId: "realgram-second",
+  storageBucket: "realgram-second.firebasestorage.app",
+  messagingSenderId: "1096328313170",
+  appId: "1:1096328313170:web:e561d7786a5276fa42a28b",
+  measurementId: "G-R6EFFWRQYP",
+  databaseURL: 'https://realgram-second-default-rtdb.europe-west1.firebasedatabase.app'
 };
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(),
     provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideRouter(routes), 
-    /**provideClientHydration(withEventReplay())
-    importProvidersFrom([
-      provideFirebaseApp(() => initializeApp(environment.firebase)),
-      provideAuth(() => getAuth()),
-      provideFirestore(() => getFirestore()),
-      provideDatabase(() => getDatabase()), 
-      provideAnimationsAsync()
-    ])*/
- 
+    provideRouter(routes),
     provideFirebaseApp(() => 
       initializeApp({ 
-        apiKey: "AIzaSyDXb195ky45HzIbUZSvPP9K6b66v9y5iAE",
-        authDomain: "test-1eded.firebaseapp.com",
-        projectId: "test-1eded",
-        storageBucket: "test-1eded.firebasestorage.app",
-        messagingSenderId: "7885630519",
-        appId: "1:7885630519:web:2ebc98afa61dd3fbcae3b2",
-        measurementId: "G-SLPQBDPKSS",
-        databaseURL: 'https://test-1eded-default-rtdb.europe-west1.firebasedatabase.app'
+        apiKey: "AIzaSyBpu2gvUIBbAtQ3X8Jfq1iykjvN_XITV6A",
+        authDomain: "realgram-second.firebaseapp.com",
+        projectId: "realgram-second",
+        storageBucket: "realgram-second.firebasestorage.app",
+        messagingSenderId: "1096328313170",
+        appId: "1:1096328313170:web:e561d7786a5276fa42a28b",
+        measurementId: "G-R6EFFWRQYP",
+        databaseURL: 'https://realgram-second-default-rtdb.europe-west1.firebasedatabase.app'
       })),
       { provide: FIREBASE_OPTIONS, useValue: firebaseConfig },
       provideAuth(() => getAuth()),

@@ -53,6 +53,9 @@ export class UserPostDetailsComponent {
   allLikes: any[] = [];
   countOfAllLikes = 0;
 
+  isNews: boolean = false;
+  weatherIcon: string = '';
+
   constructor(private commentService: CommentService, private authService: AuthService, 
     private userPostService: UserPostService, private likeService: LikeService,
     private changeDetector: ChangeDetectorRef) {
@@ -68,12 +71,18 @@ export class UserPostDetailsComponent {
   }
 
   ngOnInit() {
+    if(this.post.news_title) {
+      this.isNews = true;
+    }
+    if(this.post.weather_icon) {
+      this.weatherIcon = this.post.weather_icon;
+    }
     // this.getLikes(this.post.id);
   }
 
   ngAfterViewInit() {
     this.getLikes(this.post.id);
-    this.changeDetector.detectChanges()
+    this.changeDetector.detectChanges();
   }
 
   redirectToUserProfile(username: string) {

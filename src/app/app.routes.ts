@@ -5,6 +5,8 @@ import { UploadPostComponent } from './upload-post/upload-post.component';
 import { AuthGuard } from './services/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { UserSearchComponent } from './user-search/user-search.component';
+import { NewsComponent } from './news/news.component';
+import { WeatherComponent } from './weather/weather.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -13,4 +15,6 @@ export const routes: Routes = [
     { path: 'upload', component: UploadPostComponent },
     { path: 'login', component: LoginComponent },
     { path: 'search', component: UserSearchComponent },
+    { path: 'news', component: NewsComponent },
+    { path: 'weather', component: WeatherComponent },
 ];

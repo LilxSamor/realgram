@@ -1,0 +1,13 @@
+.feed {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.content-container {
+    margin: auto;
+}
+
+.footer-placeholder {
+    min-height: 6rem;
+}
