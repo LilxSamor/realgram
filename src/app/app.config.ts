@@ -14,7 +14,7 @@ import { provideAuth as provideAuth_alias } from 'angular-auth-oidc-client';
 import { provideHttpClient } from '@angular/common/http';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBpu2gvUIBbAtQ3X8Jfq1iykjvN_XITV6A",
+  apiKey: "",
   authDomain: "realgram-second.firebaseapp.com",
   projectId: "realgram-second",
   storageBucket: "realgram-second.firebasestorage.app",
@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideFirebaseApp(() => 
       initializeApp({ 
-        apiKey: "AIzaSyBpu2gvUIBbAtQ3X8Jfq1iykjvN_XITV6A",
+        apiKey: "",
         authDomain: "realgram-second.firebaseapp.com",
         projectId: "realgram-second",
         storageBucket: "realgram-second.firebasestorage.app",
