@@ -8,6 +8,7 @@ export class Post {
     news_title: string = '';
     news_source: string = '';
     news_published_at: string = '';
+    is_news: boolean = false;
     weather_icon: string = '';
     description?: string;
     pollOptions: PollOption[] = [];

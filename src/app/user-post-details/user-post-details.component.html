@@ -13,7 +13,7 @@
         </div>
     </div>
     <mat-dialog-content class="card-content">
-        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo"></app-photo>
+        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo && (post.url != null && '')"></app-photo>
         <app-video [post]="post" *ngIf="post.type===postTypes.Video"></app-video>
         <app-audio-player [post]="post" *ngIf="post.type===postTypes.Audio"></app-audio-player>
         <app-poll [post]="post" *ngIf="post.type===postTypes.Poll"></app-poll>

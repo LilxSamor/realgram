@@ -4,6 +4,10 @@
     max-width: 800px;
 }
 
+.card-subtitle {
+    font-size: 1em;
+}
+
 .card-actions {
     padding: 16px;
     justify-content: space-between;

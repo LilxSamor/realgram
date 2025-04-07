@@ -31,7 +31,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideFirebaseApp(() => 
       initializeApp({ 
-        apiKey: "",
+        apiKey: "AIzaSyBpu2gvUIBbAtQ3X8Jfq1iykjvN_XITV6A",
         authDomain: "realgram-second.firebaseapp.com",
         projectId: "realgram-second",
         storageBucket: "realgram-second.firebasestorage.app",

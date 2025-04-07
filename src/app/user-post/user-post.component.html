@@ -7,10 +7,10 @@
         </div>
         <mat-card-title *ngIf="!this.isNews" class="username-title" (click)="redirectToUserProfile(post.username)">&#64;{{post.username}}</mat-card-title>
         <mat-card-title *ngIf="this.isNews" class="username-title">{{post.news_title}}</mat-card-title>
-        <mat-card-subtitle *ngIf="!this.isNews && this.weatherIcon===''">{{post.type}}</mat-card-subtitle>
+        <mat-card-subtitle class="card-subtitle" *ngIf="!this.isNews && this.weatherIcon===''">{{post.type}}</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo && post.url != null"></app-photo>
+        <app-photo [post]="post" *ngIf="post.type===postTypes.Photo && (post.url != null && '')"></app-photo>
         <app-video [post]="post" *ngIf="post.type===postTypes.Video"></app-video>
         <app-audio-player [post]="post" *ngIf="post.type===postTypes.Audio"></app-audio-player>
         <app-poll [post]="post" *ngIf="post.type===postTypes.Poll"></app-poll>
