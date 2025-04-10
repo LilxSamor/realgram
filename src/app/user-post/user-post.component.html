@@ -1,9 +1,10 @@
 <mat-card *ngIf="post" class="card" appearance="outlined">
     <mat-card-header>
         <div mat-card-avatar class="header-image" (click)="redirectToUserProfile(post.username)" [ngStyle]="{ background: 'url({{this.profilePictureUrl}})' }" >
-            <img class="header-profile-picture" *ngIf="!this.isNews && !this.weatherIcon" [src]="this.profilePictureUrl" alt="Profile picture"/>
+            <img class="header-profile-picture" *ngIf="!this.isNews && !this.weatherIcon && this.post.username!=='FortuneCookie'" [src]="this.profilePictureUrl" alt="Profile picture"/>
             <img class="header-profile-picture" *ngIf="this.isNews" [src]="'/assets/news.jpg'" alt="Profile picture"/>
             <img class="header-profile-picture" *ngIf="this.weatherIcon" [src]="this.weatherIcon" alt="Weather icon"/>
+            <img class="header-profile-picture" *ngIf="this.post.username==='FortuneCookie'" [src]="'/assets/fortune_cookie.png'" alt="Weather icon"/>
         </div>
         <mat-card-title *ngIf="!this.isNews" class="username-title" (click)="redirectToUserProfile(post.username)">&#64;{{post.username}}</mat-card-title>
         <mat-card-title *ngIf="this.isNews" class="username-title">{{post.news_title}}</mat-card-title>
