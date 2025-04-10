@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { UserSearchComponent } from './user-search/user-search.component';
 import { NewsComponent } from './news/news.component';
 import { WeatherComponent } from './weather/weather.component';
+import { FortuneComponent } from './fortune/fortune.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
@@ -17,4 +18,5 @@ export const routes: Routes = [
     { path: 'search', component: UserSearchComponent },
     { path: 'news', component: NewsComponent },
     { path: 'weather', component: WeatherComponent },
+    { path: 'fortune', component: FortuneComponent },
 ];
