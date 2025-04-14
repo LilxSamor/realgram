@@ -13,6 +13,7 @@ export class Post {
     description?: string;
     pollOptions: PollOption[] = [];
     usersWhoVoted: string[] = [];
+    likes: number = 0;
 }
 
 export enum Type {

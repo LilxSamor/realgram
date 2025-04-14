@@ -10,10 +10,17 @@ import { map, take } from 'rxjs/operators';
 import { HeaderComponent } from "../shared/header/header.component";
 import { NewsService } from '../services/news.service';
 import { WeatherService } from '../services/weather.service';
+import { FortuneCookieService } from '../services/fortune-cookie.service';
+import { MatIconModule } from '@angular/material/icon';
+import {MatMenuModule} from '@angular/material/menu';
+import { user } from '@angular/fire/auth';
+import { CommentService } from '../services/comment.service';
+import { LikeService } from '../services/like.service';
+import { lastValueFrom, of } from 'rxjs';
 
 @Component({
   selector: 'app-feed',
-  imports: [NgFor, NgIf, MatCardModule, MatButtonModule, MatProgressSpinnerModule, UserPostComponent, HeaderComponent],
+  imports: [NgFor, NgIf, MatCardModule, MatButtonModule, MatIconModule, MatMenuModule, MatProgressSpinnerModule, UserPostComponent, HeaderComponent],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css'
 })
@@ -22,10 +29,48 @@ export class FeedComponent {
   articles: any;
   weatherReports: any;
 
-  constructor(private userPostService: UserPostService, private newsService: NewsService, private weatherService: WeatherService) {}
+  sortedPosts: Post[] = [];
+  sortOption: string = 'newest';
+  showBotPosts: boolean = false;
+
+  constructor(
+    private userPostService: UserPostService, 
+    private newsService: NewsService, 
+    private weatherService: WeatherService, 
+    private fortuneCookieService: FortuneCookieService,
+    private likeService: LikeService
+  ) {}
 
   ngOnInit(): void {
     this.retrievePosts();
+  }
+
+  sortPosts() {
+    const userPosts = this.realPosts.filter(post => post.username !== 'WeatherReport' && post.username !== 'FortuneCookie' && !post.is_news);
+    const botPosts = this.realPosts.filter(post => post.username === 'WeatherReport' || post.username === 'FortuneCookie' || post.is_news === true);
+
+    let combinedPosts: Post[];
+
+    if(this.showBotPosts) {
+      combinedPosts = [...userPosts, ...botPosts];
+    } else {
+      combinedPosts = userPosts;
+    }
+
+    if (this.sortOption === 'oldest') {
+      combinedPosts.sort((a, b) => (a.id || 0) - (b.id || 0));
+    } else {
+      combinedPosts.sort((a, b) => (b.id || 0) - (a.id || 0));
+    }
+      
+    console.log(botPosts);
+    console.log(this.sortedPosts);
+    this.sortedPosts = combinedPosts;
+  }
+
+  toggleBotPosts() {
+    this.showBotPosts = !this.showBotPosts;
+    this.sortPosts();
   }
 
   formatDate(dateString: string): string {
@@ -55,7 +100,6 @@ export class FeedComponent {
       take(1)
     ).subscribe(existingPosts => {
       const existingWeatherPost = existingPosts.find(p => p.id === post.id);
-      console.log(existingWeatherPost);
       if(!existingWeatherPost) {
         this.userPostService.create(post).catch((err: any) => {
           console.error('Error saving post', err);
@@ -100,9 +144,24 @@ export class FeedComponent {
     });
   }
 
+  prepareFortuneCookiePosts(fortuneCookies: any) {
+    fortuneCookies.forEach((fortuneCookie: any, index: number) => {
+      const uniqueId = new Date(fortuneCookie.fetchedAt).getTime() + index;
+      let post = new Post();
+      post.id = uniqueId;
+      post.username = 'FortuneCookie'
+      post.type = Type.Text;
+      post.news_title = "Fortune Cookie of the Day";
+      post.description = fortuneCookie.quote.text;
+      post.url = '';
+      post.news_published_at = fortuneCookie.fetchedAt;
+      this.createPost(post);
+    });
+  }
+
   fetchNews() {
     this.newsService.getLatestNews().subscribe(data => {
-      console.log(data);
+      // console.log(data);
       this.articles = data;
       this.prepareNewsPosts();
     });
@@ -112,6 +171,12 @@ export class FeedComponent {
     this.weatherService.getLatestWeather().subscribe((data) => {
       this.weatherReports = data;
       this.prepareWeatherPosts(this.weatherReports);
+    });
+  }
+
+  fetchFortuneCookies() {
+    this.fortuneCookieService.getFortuneCookieOfTheDay().subscribe((data) => {
+      this.prepareFortuneCookiePosts(data);
     });
   }
 
@@ -127,6 +192,8 @@ export class FeedComponent {
       this.realPosts = sortedData as Post[];
       this.fetchWeatherReport();
       this.fetchNews();
+      this.fetchFortuneCookies();
+      this.sortPosts();
     });
   }
 }

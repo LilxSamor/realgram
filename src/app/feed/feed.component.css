@@ -8,6 +8,35 @@
     margin: auto;
 }
 
+.sorting {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 2rem;
+}
+
+.sorting-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.sorting button {
+    margin-left: 8px;
+}
+
+.bot-post-message {
+    background-color: #f1f1f1;
+    padding: 1rem;
+    margin: 2rem;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.current-sort {
+    text-align: center;
+    font-weight: bold;
+}
+
 /*.feed-header {
     display: flex;
     flex-wrap: wrap;
