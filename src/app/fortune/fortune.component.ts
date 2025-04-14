@@ -26,19 +26,15 @@ export class FortuneComponent {
   
   createPosts(fortuneCookies: any) {
     fortuneCookies.forEach((fortuneCookie: any, index: number) => {
-      //if(!this.posts.includes(fortuneCookie.quote.text)) {
-        let post = new Post();
-        post.id = index;
-        post.username = 'FortuneCookie'
-        post.type = Type.Text;
-        post.news_title = "Fortune Cookie of the Day";
-        post.description = fortuneCookie.quote.text;
-        post.url = '';
-        post.news_published_at = fortuneCookie.fetchedAt;
-        this.posts.push(post);
-      //}
+      let post = new Post();
+      post.id = index;
+      post.username = 'FortuneCookie'
+      post.type = Type.Text;
+      post.news_title = "Fortune Cookie of the Day";
+      post.description = fortuneCookie.quote.text;
+      post.url = '';
+      post.news_published_at = fortuneCookie.fetchedAt;
+      this.posts.push(post);
     });
-    console.log(this.posts);
-    console.log(this.fortuneCookies);
   }
 }

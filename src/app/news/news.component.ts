@@ -35,12 +35,10 @@ export class NewsComponent {
         this.posts.push(post);
       }
     });
-    console.log(this.posts);
   }
 
   fetchNews() {
     this.newsService.getLatestNews().subscribe(data => {
-      console.log(data);
       this.articles = data;
       this.createPosts();
     });

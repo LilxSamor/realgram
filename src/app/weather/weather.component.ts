@@ -30,7 +30,6 @@ export class WeatherComponent {
       return new Date(report.fetchedAt) > new Date(latest.fetchedAt) ? report : latest;
     });
 
-    console.log(latestReport.data);
     let post = new Post();
     post.id = latestReport.data.location.localtime_epoch;
     post.username = 'WeatherReports'
@@ -38,6 +37,5 @@ export class WeatherComponent {
     post.description = 'The weather today in ' + latestReport.data.location.name + ' is ' + latestReport.data.current.condition.text.toLowerCase() + ". It's " + latestReport.data.current.temp_c + '°C.';
     post.weather_icon = latestReport.data.current.condition.icon;
     this.posts.push(post);
-    console.log(post.weather_icon);
   }
 }

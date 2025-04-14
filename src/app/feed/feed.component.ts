@@ -62,9 +62,6 @@ export class FeedComponent {
     } else {
       combinedPosts.sort((a, b) => (b.id || 0) - (a.id || 0));
     }
-      
-    console.log(botPosts);
-    console.log(this.sortedPosts);
     this.sortedPosts = combinedPosts;
   }
 
@@ -161,7 +158,6 @@ export class FeedComponent {
 
   fetchNews() {
     this.newsService.getLatestNews().subscribe(data => {
-      // console.log(data);
       this.articles = data;
       this.prepareNewsPosts();
     });
