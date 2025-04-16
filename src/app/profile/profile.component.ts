@@ -38,6 +38,7 @@ export class ProfileComponent {
   currentUser: CustomUser = new CustomUser(this.auth);
   uid?: string = '';
   username?: string = '';
+  profilePictureUrl: string = '';
 
   currentUserFollowsShownUser = false;
   currentUserFollow: any;
@@ -72,6 +73,7 @@ export class ProfileComponent {
         this.currentUser = data;
         if(this.currentUser.username == this.username) {
           this.isProfileOfUser = true;
+          this.profilePictureUrl = data.picture_url!;
         }
       }
     });
@@ -118,8 +120,6 @@ export class ProfileComponent {
 
         reader.readAsDataURL(selectedFile);
 */
-        console.log('Selected file:', selectedFile);
-        console.log('Selected file type:', selectedFile.type);
       } else {
         console.error('No file selected');
       }
@@ -144,7 +144,6 @@ export class ProfileComponent {
       const fileName = this.username + '.jpeg';
 
       this.uploadService.uploadPfp(this.croppedImage, this.croppedImage.name, this.username!).then(() => {
-        this.updateProfilePictureInFirebase(fileName);
       }).catch(error => console.error('Upload failed', error));
     } else {
         console.log('No crop event passed!');
@@ -164,18 +163,22 @@ export class ProfileComponent {
   }
 
   uploadFile(file: File) {
-    console.log('uploading');
-    const fileName = this.username + '.jpeg';  // Update your naming logic if required
+    const fileName = this.username + '.jpg';
     this.uploadService.uploadPfp(file, fileName, this.username!).then(() => {
-      console.log('uploaded');
+      this.updateProfilePictureUrlInFirebase(fileName);
     }).catch(error => console.error('Upload failed', error));
   }
 
-  updateProfilePictureInFirebase(fileName: string) {
+  updateProfilePictureUrlInFirebase(fileName: string) {
+    this.uid = this.auth.currentUser?.uid;
     const fileExtension = fileName.split('.').pop();
-    const url = `https://s3.us-east-1.amazonaws.com/real.gram/avatars/${this.username}.${fileExtension}`;
+    const url = `https://s3.us-east-1.amazonaws.com/real.gram/avatars/${this.username}.${fileExtension}?v=${Date.now()}`;
     this.db.database.ref(`users/${this.uid}`).update({
       picture_url: url,
+    }).then(() => {
+      this.profilePictureUrl = url;
+    }).catch(error => {
+      console.error('Error updating profile picture URL:', error);
     });
   }
 
@@ -188,6 +191,9 @@ export class ProfileComponent {
       )
     ).subscribe(allUsers => {
       this.userOfShownProfile = allUsers.find(a => a.username === this.username) as CustomUser;
+      if(this.userOfShownProfile) {
+        this.profilePictureUrl = this.userOfShownProfile.picture_url || '';
+      }
     });
   }
 

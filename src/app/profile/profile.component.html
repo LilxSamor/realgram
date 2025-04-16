@@ -2,13 +2,15 @@
     <div>
         <div class="user-info-container">
             <div>
-                <!--img class="profile-picture" [src]="'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.username + '.jpg'" alt="Profile picture"/-->
                 <div class="profile-picture-container">
                   <mat-icon class="edit-icon" *ngIf="isHovered" style="position: absolute;">
                     edit
                   </mat-icon>
-                  <img class="profile-picture" 
-                      [src]="'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.username + '.jpg'" 
+                  <img class="profile-picture" *ngIf="!this.isProfileOfUser"
+                      [src]="profilePictureUrl" 
+                      alt="Profile picture" />
+                  <img class="profile-picture" *ngIf="this.isProfileOfUser"
+                      [src]="profilePictureUrl" 
                       alt="Profile picture"
                       (mouseover)="isHovered = true"
                       (mouseleave)="isHovered = false"
@@ -21,8 +23,8 @@
                   <p *ngIf="this.currentUser.description !== ''" appEditable>{{this.currentUser.description}}</p>
                 </ng-container>
                 <ng-container *ngIf="!this.isProfileOfUser">
-                  <p *ngIf="!this.currentUser.description">lorem ipsum dies das ananas...</p>
-                  <p *ngIf="this.currentUser.description !== ''">{{this.currentUser.description}}</p>
+                  <p *ngIf="!this.userOfShownProfile?.description">lorem ipsum dies das ananas...</p>
+                  <p *ngIf="this.userOfShownProfile?.description !== ''">{{this.userOfShownProfile?.description}}</p>
                 </ng-container>
                 <button mat-button *ngIf="!isProfileOfUser && !currentUserFollowsShownUser" (click)="this.followUser()">FOLLOW</button>
                 <button mat-button *ngIf="!isProfileOfUser && currentUserFollowsShownUser" (click)="this.unfollowUser()">UNFOLLOW</button>
