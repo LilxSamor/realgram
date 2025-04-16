@@ -9,7 +9,6 @@ import { Auth } from '@angular/fire/auth';
 export class EditableDirective {
   auth = inject(Auth);
 
-  @Input() currentUID!: string;
   private isEditing = false;
   private originalText = '';
   private userInput = '';
@@ -72,10 +71,8 @@ export class EditableDirective {
   }
 
   private saveChanges() {
-    console.log('save changes UID: ' + this.uid);
     this.isEditing = false;
     this.elementRef.nativeElement.innerHTML = this.userInput;
-    // Save the user's input to the Firebase Realtime Database
     this.db.database.ref(`users/${this.uid}`).update({
       description: this.userInput,
     });

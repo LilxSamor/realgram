@@ -65,7 +65,6 @@ export class ProfileComponent {
     private ngZone: NgZone
   ) {
     this.uid = this.auth.currentUser?.uid;
-    console.log(this.uid);
     this.username = this.route.snapshot.paramMap.get('username') as string;
 
     this.authService.getUsername(this.auth.currentUser!.uid).subscribe(data => {
@@ -165,7 +164,6 @@ export class ProfileComponent {
   }
 
   uploadFile(file: File) {
-    
     console.log('uploading');
     const fileName = this.username + '.jpeg';  // Update your naming logic if required
     this.uploadService.uploadPfp(file, fileName, this.username!).then(() => {
@@ -176,14 +174,9 @@ export class ProfileComponent {
   updateProfilePictureInFirebase(fileName: string) {
     const fileExtension = fileName.split('.').pop();
     const url = `https://s3.us-east-1.amazonaws.com/real.gram/avatars/${this.username}.${fileExtension}`;
-
     this.db.database.ref(`users/${this.uid}`).update({
       picture_url: url,
     });
-  }
-
-  get profilePictureUrl(): string {
-    return `https://s3.us-east-1.amazonaws.com/real.gram/avatars/${this.username}.jpg`;
   }
 
   getUser(): void {

@@ -16,9 +16,14 @@
                       (click)="updateProfilePicture()" />
                 </div>
                 <h3>{{this.username}}</h3>
-                
-                <p *ngIf="!this.currentUser.description" appEditable [currentUID]="this.uid!">lorem ipsum dies das ananas...</p>
-                <p *ngIf="this.currentUser.description !== ''" appEditable>{{this.currentUser.description}}</p>
+                <ng-container *ngIf="this.isProfileOfUser">
+                  <p *ngIf="!this.currentUser.description" appEditable>lorem ipsum dies das ananas...</p>
+                  <p *ngIf="this.currentUser.description !== ''" appEditable>{{this.currentUser.description}}</p>
+                </ng-container>
+                <ng-container *ngIf="!this.isProfileOfUser">
+                  <p *ngIf="!this.currentUser.description">lorem ipsum dies das ananas...</p>
+                  <p *ngIf="this.currentUser.description !== ''">{{this.currentUser.description}}</p>
+                </ng-container>
                 <button mat-button *ngIf="!isProfileOfUser && !currentUserFollowsShownUser" (click)="this.followUser()">FOLLOW</button>
                 <button mat-button *ngIf="!isProfileOfUser && currentUserFollowsShownUser" (click)="this.unfollowUser()">UNFOLLOW</button>
                 <button mat-button *ngIf="isProfileOfUser" (click)="this.signOut()">SIGN OUT</button>
