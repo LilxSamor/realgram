@@ -16,21 +16,15 @@
                       (click)="updateProfilePicture()" />
                 </div>
                 <h3>{{this.username}}</h3>
-                <p *ngIf="!this.currentUser.description" appEditable>lorem ipsum dies das ananas...</p>
+                
+                <p *ngIf="!this.currentUser.description" appEditable [currentUID]="this.uid!">lorem ipsum dies das ananas...</p>
                 <p *ngIf="this.currentUser.description !== ''" appEditable>{{this.currentUser.description}}</p>
                 <button mat-button *ngIf="!isProfileOfUser && !currentUserFollowsShownUser" (click)="this.followUser()">FOLLOW</button>
                 <button mat-button *ngIf="!isProfileOfUser && currentUserFollowsShownUser" (click)="this.unfollowUser()">UNFOLLOW</button>
                 <button mat-button *ngIf="isProfileOfUser" (click)="this.signOut()">SIGN OUT</button>
+                <div *ngIf="this.imageChangedEvent">
+                  {{this.imageChangedEvent.target.files[0].name}}</div>
                 
-                <image-cropper *ngIf="this.imageChangedEvent" 
-                                      [imageChangedEvent]="this.imageChangedEvent"
-                                      [maintainAspectRatio]="true"
-                                      [aspectRatio]="4 / 3"
-                                      format="jpeg"
-                                      (imageCropped)="imageCropped($event)"
-                                      (imageLoaded)="imageLoaded()"
-                                      (loadImageFailed)="loadImageFailed()">
-                </image-cropper>
             </div>
             <div>
                 <p><b>{{this.countOfUserPosts}}</b></p><p>Beiträge</p>
@@ -42,6 +36,16 @@
                 <p><b>{{this.following}}</b></p><p>gefolgt</p>
             </div>
             <div class="break"></div>
+            <!--image-cropper *ngIf="this.alreadySelectedFile" 
+                                      [imageChangedEvent]="this.imageChangedEvent"
+                                      [maintainAspectRatio]="true"
+                                      [aspectRatio]="4 / 3"
+                                      format="jpeg"
+                                      (imageCropped)="imageCropped($event)"
+                                      (imageLoaded)="imageLoaded()"
+                                      (cropperReady)="cropperReady()"
+                                      (loadImageFailed)="loadImageFailed()">
+                </image-cropper-->
             <div *ngIf="realPosts" class="user-posts">
               <mat-tab-group [@.disabled]="true">
                 <mat-tab class="tab">

@@ -2,6 +2,7 @@ image-cropper {
     display: flex;
     border: 2px dashed red; /* Give it a visible border temporarily */
     height: 100%; /* Maintain aspect ratio */
+    z-index: 10000;
 }
 
 .mat-tab-body-wrapper {

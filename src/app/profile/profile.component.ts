@@ -1,4 +1,4 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, NgZone, ViewEncapsulation } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -19,10 +19,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { UploadService } from '../services/upload.service';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { FormsModule } from '@angular/forms';
+import { EditableDirective } from '../shared/directive/editable.directive';
 
 @Component({
   selector: 'app-profile',
-  imports: [NgFor, NgIf, NgStyle, MatButtonModule, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent, ImageCropperComponent],
+  imports: [NgFor, NgIf, NgStyle, MatButtonModule, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent, FormsModule, EditableDirective],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
   encapsulation: ViewEncapsulation.None
@@ -49,6 +51,7 @@ export class ProfileComponent {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   fileSrc: string = '';
+  alreadySelectedFile = false;
 
   constructor(
     private route: ActivatedRoute, 
@@ -57,9 +60,12 @@ export class ProfileComponent {
     private authService: AuthService, 
     private followService: FollowService,
     private uploadService: UploadService,
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private changeDetectorRef: ChangeDetectorRef,
+    private ngZone: NgZone
   ) {
-    // this.uid = this.auth.currentUser?.uid;
+    this.uid = this.auth.currentUser?.uid;
+    console.log(this.uid);
     this.username = this.route.snapshot.paramMap.get('username') as string;
 
     this.authService.getUsername(this.auth.currentUser!.uid).subscribe(data => {
@@ -87,21 +93,34 @@ export class ProfileComponent {
     fileInput.onchange = (event: Event) => {
       const target = event.target as HTMLInputElement;
       const selectedFile = target?.files?.[0];
+      this.alreadySelectedFile = true;
 
       if(selectedFile) {
+        this.uploadFile(selectedFile);
+        /*
         const reader = new FileReader();
 
         reader.onload = (e) => {
-          this.imageChangedEvent = selectedFile;
-          /*
-          this.imageChangedEvent = {
-            target: {
-              files: [selectedFile]
-            }
-          };*/
+          console.log('FileReader result:', e.target?.result); // Log the result
+
+          if(reader.result) {
+            this.ngZone.run(() => {
+              this.imageChangedEvent = {
+                target: {
+                  files: [selectedFile]
+                }
+              };
+              this.fileSrc = e.target?.result as string;
+              console.log('Image changed event:', this.imageChangedEvent);
+              this.changeDetectorRef.detectChanges();
+            });
+          }
         };
 
         reader.readAsDataURL(selectedFile);
+*/
+        console.log('Selected file:', selectedFile);
+        console.log('Selected file type:', selectedFile.type);
       } else {
         console.error('No file selected');
       }
@@ -109,20 +128,28 @@ export class ProfileComponent {
   }
 
   imageCropped(event: ImageCroppedEvent) {
-    this.croppedImage = event.blob;
-    console.log('Cropped image:', this.croppedImage);
+    console.log('Cropped image event:', event);
+    if (event) {
+      console.log('Cropped event data:', event); // This should log the crop data
+      this.croppedImage = event.blob;
+      const reader = new FileReader();
+      reader.readAsDataURL(this.croppedImage);
+      reader.onload = () => {
+        this.ngZone.run(() => {
+          this.fileSrc = reader.result as string; // Set the preview source
+        });
+      };
 
-    const fileName = this.username + '.jpeg';
+      console.log('Cropped image:', this.croppedImage);
 
-    const reader = new FileReader();
-    reader.readAsDataURL(this.croppedImage);
-    reader.onload = () => {
-      this.fileSrc = reader.result as string; // Set the preview source
-    };
+      const fileName = this.username + '.jpeg';
 
-    this.uploadService.uploadPfp(this.croppedImage, this.croppedImage.name, this.username!).then(() => {
-      this.updateProfilePictureInFirebase(fileName);
-    }).catch(error => console.error('Upload failed', error));
+      this.uploadService.uploadPfp(this.croppedImage, this.croppedImage.name, this.username!).then(() => {
+        this.updateProfilePictureInFirebase(fileName);
+      }).catch(error => console.error('Upload failed', error));
+    } else {
+        console.log('No crop event passed!');
+    }    
   }
 
   imageLoaded() {
@@ -131,6 +158,19 @@ export class ProfileComponent {
 
   loadImageFailed() {
     console.error("Image loading failed");
+  }
+
+  cropperReady() {
+    // cropper ready
+  }
+
+  uploadFile(file: File) {
+    
+    console.log('uploading');
+    const fileName = this.username + '.jpeg';  // Update your naming logic if required
+    this.uploadService.uploadPfp(file, fileName, this.username!).then(() => {
+      console.log('uploaded');
+    }).catch(error => console.error('Upload failed', error));
   }
 
   updateProfilePictureInFirebase(fileName: string) {

@@ -1,20 +1,28 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject, Input } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
+import { CustomUser } from '../model/user';
+import { Auth } from '@angular/fire/auth';
 
 @Directive({
   selector: '[appEditable]'
 })
 export class EditableDirective {
+  auth = inject(Auth);
+
+  @Input() currentUID!: string;
   private isEditing = false;
   private originalText = '';
   private userInput = '';
+  private uid = '';
 
   constructor(private elementRef: ElementRef, private db: AngularFireDatabase) {
-    this.originalText = this.elementRef.nativeElement.textContent;
+    this.originalText = this.elementRef.nativeElement.textContent || '';
+    this.userInput = this.originalText;
+    this.uid = this.auth.currentUser!.uid;
   }
 
-  @HostListener('dblclick', ['$event'])
-  onDoubleClick(event: Event) {
+  @HostListener('click', ['$event'])
+  onClick(event: Event) {
     this.toggleEditMode();
   }
 
@@ -23,38 +31,54 @@ export class EditableDirective {
     this.toggleEditMode();
   }
 
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if (this.isEditing && event.key === 'Enter') {
+      this.saveChanges();
+    }
+  }
+
   private toggleEditMode() {
+    const element = this.elementRef.nativeElement;
+
     if(this.isEditing) {
       this.saveChanges();
     } else {
       this.isEditing = true;
-      this.elementRef.nativeElement.innerHTML = `
-        <input
-          type="text"
-          [(ngModel)]="userInput"
-          (ngModelChange)="onInputChange($event)"
-          [style.width]="elementRef.nativeElement.offsetWidth + 'px'"
-          [style.height]="elementRef.nativeElement.offsetHeight + 'px'"
-          [style.fontFamily]="elementRef.nativeElement.style.fontFamily"
-          [style.fontSize]="elementRef.nativeElement.style.fontSize"
-          [style.lineHeight]="elementRef.nativeElement.style.lineHeight"
-          [style.textAlign]="elementRef.nativeElement.style.textAlign"
-        >
-      `;
+
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = this.userInput;
+
+      const computedStyle = window.getComputedStyle(element);
+      input.style.width = element.offsetWidth + 'px';
+      input.style.height = computedStyle.height;
+      input.style.fontFamily = computedStyle.fontFamily;
+      input.style.fontSize = computedStyle.fontSize;
+      input.style.lineHeight = computedStyle.lineHeight;
+      input.style.textAlign = computedStyle.textAlign;
+      input.style.border = 'none';
+      input.style.background = 'transparent';
+      input.style.outline = 'none';
+
+      input.addEventListener('input', (e) => {
+        this.userInput = (e.target as HTMLInputElement).value;
+      });
+
+      element.innerHTML = '';
+      element.appendChild(input);
+      input.focus();
     }
   }
 
   private saveChanges() {
-    /*this.isEditing = false;
+    console.log('save changes UID: ' + this.uid);
+    this.isEditing = false;
     this.elementRef.nativeElement.innerHTML = this.userInput;
     // Save the user's input to the Firebase Realtime Database
-    this.db.database.ref(`users/${this.currentUser.uid}`).update({
+    this.db.database.ref(`users/${this.uid}`).update({
       description: this.userInput,
-    });*/
-  }
-
-  private onInputChange(event: any) {
-    this.userInput = event.target.value;
+    });
   }
 
 }
