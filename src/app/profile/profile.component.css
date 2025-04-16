@@ -1,5 +1,16 @@
+image-cropper {
+    display: flex;
+    border: 2px dashed red; /* Give it a visible border temporarily */
+    height: 100%; /* Maintain aspect ratio */
+}
+
 .mat-tab-body-wrapper {
     padding: 2rem;
+}
+
+.profile-picture-container {
+    position: relative;
+    display: inline-block;
 }
 
 .profile-picture {
@@ -9,6 +20,10 @@
     flex-shrink: 0;
     margin-bottom: 16px;
     object-fit: cover;
+}
+
+.profile-picture:hover {
+    cursor: pointer; /* Change cursor to pointer on hover */
 }
 
 .user-info-container {
@@ -34,4 +49,12 @@
 
 .footer-placeholder {
     min-height: 2rem;
+}
+
+.edit-icon {
+    transform: translate(-50%, -50%);
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5); /* Optional: Semi-transparent background */
+    border-radius: 50%; /* Optional: Make the background circular */
+    padding: 5px; /* Optional: Add padding around the icon */
 }

@@ -96,8 +96,8 @@ export class FeedComponent {
       map(changes => changes.map(c => ({ key: c.payload.key, ...c.payload.val() }))),
       take(1)
     ).subscribe(existingPosts => {
-      const existingWeatherPost = existingPosts.find(p => p.id === post.id);
-      if(!existingWeatherPost) {
+      const existingPost = existingPosts.find(p => p.description === post.description);
+      if(!existingPost) {
         this.userPostService.create(post).catch((err: any) => {
           console.error('Error saving post', err);
         });

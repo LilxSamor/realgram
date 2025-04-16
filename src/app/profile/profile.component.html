@@ -2,12 +2,35 @@
     <div>
         <div class="user-info-container">
             <div>
-                <img class="profile-picture" [src]="'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.username + '.jpg'" alt="Profile picture"/>
+                <!--img class="profile-picture" [src]="'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.username + '.jpg'" alt="Profile picture"/-->
+                <div class="profile-picture-container">
+                  <mat-icon class="edit-icon" *ngIf="isHovered" style="position: absolute;">
+                    edit
+                  </mat-icon>
+                  <img class="profile-picture" 
+                      [src]="'https://s3.us-east-1.amazonaws.com/real.gram/avatars/' + this.username + '.jpg'" 
+                      alt="Profile picture"
+                      (mouseover)="isHovered = true"
+                      (mouseleave)="isHovered = false"
+                      [ngStyle]="{'opacity': isHovered ? 0.5 : 1}"
+                      (click)="updateProfilePicture()" />
+                </div>
                 <h3>{{this.username}}</h3>
-                <p>lorem ipsum dies das ananas...</p>
+                <p *ngIf="!this.currentUser.description" appEditable>lorem ipsum dies das ananas...</p>
+                <p *ngIf="this.currentUser.description !== ''" appEditable>{{this.currentUser.description}}</p>
                 <button mat-button *ngIf="!isProfileOfUser && !currentUserFollowsShownUser" (click)="this.followUser()">FOLLOW</button>
                 <button mat-button *ngIf="!isProfileOfUser && currentUserFollowsShownUser" (click)="this.unfollowUser()">UNFOLLOW</button>
                 <button mat-button *ngIf="isProfileOfUser" (click)="this.signOut()">SIGN OUT</button>
+                
+                <image-cropper *ngIf="this.imageChangedEvent" 
+                                      [imageChangedEvent]="this.imageChangedEvent"
+                                      [maintainAspectRatio]="true"
+                                      [aspectRatio]="4 / 3"
+                                      format="jpeg"
+                                      (imageCropped)="imageCropped($event)"
+                                      (imageLoaded)="imageLoaded()"
+                                      (loadImageFailed)="loadImageFailed()">
+                </image-cropper>
             </div>
             <div>
                 <p><b>{{this.countOfUserPosts}}</b></p><p>Beiträge</p>

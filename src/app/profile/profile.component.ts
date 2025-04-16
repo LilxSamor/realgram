@@ -3,7 +3,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import { UserPostComponent } from "../user-post/user-post.component";
-import { NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf, NgStyle } from '@angular/common';
 import { UserPostService } from '../services/user-post.service';
 import { Post } from '../shared/model/post';
 import { map } from 'rxjs/operators';
@@ -16,10 +16,13 @@ import { FollowService } from '../services/follow.service';
 import { Follow } from '../shared/model/follow';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatButtonModule } from '@angular/material/button';
+import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { UploadService } from '../services/upload.service';
+import { AngularFireDatabase } from '@angular/fire/compat/database';
 
 @Component({
   selector: 'app-profile',
-  imports: [NgFor, NgIf, MatButtonModule, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent],
+  imports: [NgFor, NgIf, NgStyle, MatButtonModule, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent, ImageCropperComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
   encapsulation: ViewEncapsulation.None
@@ -42,7 +45,20 @@ export class ProfileComponent {
 
   isProfileOfUser = false;
 
-  constructor(private route: ActivatedRoute, private localStorage: LocalStorageService, private userPostService: UserPostService, private authService: AuthService, private followService: FollowService) {
+  isHovered: boolean = false;
+  imageChangedEvent: any = '';
+  croppedImage: any = '';
+  fileSrc: string = '';
+
+  constructor(
+    private route: ActivatedRoute, 
+    private localStorage: LocalStorageService, 
+    private userPostService: UserPostService, 
+    private authService: AuthService, 
+    private followService: FollowService,
+    private uploadService: UploadService,
+    private db: AngularFireDatabase
+  ) {
     // this.uid = this.auth.currentUser?.uid;
     this.username = this.route.snapshot.paramMap.get('username') as string;
 
@@ -60,6 +76,74 @@ export class ProfileComponent {
     this.retrievePosts();
     this.getUser();
     this.getFollowers();
+  }
+
+  updateProfilePicture() {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.click();
+
+    fileInput.onchange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const selectedFile = target?.files?.[0];
+
+      if(selectedFile) {
+        const reader = new FileReader();
+
+        reader.onload = (e) => {
+          this.imageChangedEvent = selectedFile;
+          /*
+          this.imageChangedEvent = {
+            target: {
+              files: [selectedFile]
+            }
+          };*/
+        };
+
+        reader.readAsDataURL(selectedFile);
+      } else {
+        console.error('No file selected');
+      }
+    };
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.blob;
+    console.log('Cropped image:', this.croppedImage);
+
+    const fileName = this.username + '.jpeg';
+
+    const reader = new FileReader();
+    reader.readAsDataURL(this.croppedImage);
+    reader.onload = () => {
+      this.fileSrc = reader.result as string; // Set the preview source
+    };
+
+    this.uploadService.uploadPfp(this.croppedImage, this.croppedImage.name, this.username!).then(() => {
+      this.updateProfilePictureInFirebase(fileName);
+    }).catch(error => console.error('Upload failed', error));
+  }
+
+  imageLoaded() {
+    console.log("Image loaded");
+  }
+
+  loadImageFailed() {
+    console.error("Image loading failed");
+  }
+
+  updateProfilePictureInFirebase(fileName: string) {
+    const fileExtension = fileName.split('.').pop();
+    const url = `https://s3.us-east-1.amazonaws.com/real.gram/avatars/${this.username}.${fileExtension}`;
+
+    this.db.database.ref(`users/${this.uid}`).update({
+      picture_url: url,
+    });
+  }
+
+  get profilePictureUrl(): string {
+    return `https://s3.us-east-1.amazonaws.com/real.gram/avatars/${this.username}.jpg`;
   }
 
   getUser(): void {
