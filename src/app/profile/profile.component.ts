@@ -8,7 +8,7 @@ import { UserPostService } from '../services/user-post.service';
 import { Post } from '../shared/model/post';
 import { map } from 'rxjs/operators';
 import { LocalStorageService } from '../services/local-storage.service';
-import { Auth, User } from '@angular/fire/auth';
+import { Auth, user, User } from '@angular/fire/auth';
 import { AuthService } from '../services/auth.service';
 import { CustomUser } from '../shared/model/user';
 import { ActivatedRoute } from '@angular/router';
@@ -27,6 +27,7 @@ import { EditableDirective } from '../shared/directive/editable.directive';
   imports: [NgFor, NgIf, NgStyle, MatButtonModule, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent, FormsModule, EditableDirective],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
+  providers: [AuthService, FollowService, LocalStorageService, UserPostService, AngularFireDatabase],
   encapsulation: ViewEncapsulation.None
 })
 export class ProfileComponent {
@@ -60,62 +61,32 @@ export class ProfileComponent {
     private db: AngularFireDatabase,
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone) {
-      /*
     this.route.paramMap.subscribe(params => {
       this.username = params.get('username') as string;
-      this.uid = this.auth.currentUser?.uid;
 
-      if(this.uid) {
-        this.authService.getUsername(this.uid).subscribe(data => {
-          if(data) {
-            this.currentUser = data;
-            this.updateUserProfile();
-          }
-        });
-      }
-    });*/
-
-    /*
-    this.uid = this.auth.currentUser?.uid;
-    this.username = this.route.snapshot.paramMap.get('username') as string;
-
-    this.authService.getUsername(this.auth.currentUser!.uid).subscribe(data => {
-      if(data) {
-        this.currentUser = data;
-        if(this.currentUser.username == this.username) {
-          this.isProfileOfUser = true;
-          this.profilePictureUrl = data.picture_url!;
-        }
-      }
-      this.updateUserProfile();
-    });*/
-  }
-
-  ngOnInit(): void {
-    // this.updateUserProfile();
-    this.route.paramMap.subscribe(params => {
-      this.username = params.get('username') as string;
-      this.uid = this.auth.currentUser?.uid;
-
-      if (this.uid) {
+      if(this.auth.currentUser) {
+        this.uid = this.auth.currentUser.uid;
         this.loadUserProfile(this.uid);
       }
     });
   }
 
   loadUserProfile(uid: string): void {
-    this.authService.getUsername(uid).subscribe(data => {
-      if (data) {
-        this.currentUser = data;
-        this.isProfileOfUser = this.currentUser.username === this.username;
-        if (this.isProfileOfUser) {
-          this.profilePictureUrl = this.currentUser.picture_url!;
+    if(uid && this.username) {
+      this.authService.getUsername(uid).subscribe(data => {
+        if(data) {
+          this.currentUser = data;
+          this.isProfileOfUser = this.currentUser.username === this.username;
+
+          if(this.isProfileOfUser) {
+            this.profilePictureUrl = this.currentUser.picture_url ?? '';
+          }
+          this.updateUserProfile();
         }
-        this.updateUserProfile(); // Fetch other relevant data
-      }
-    }, error => {
-      console.error('Error fetching username:', error);
-    });
+      }, error => {
+        console.error('Error fetching username:', error);
+      });
+    }
   }
 
   updateUserProfile(): void {

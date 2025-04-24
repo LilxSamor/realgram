@@ -16,7 +16,6 @@ import { LocalStorageService } from './local-storage.service';
 export class AuthService {
   private auth: Auth = inject(Auth);
   private router: Router = inject(Router)
-  private db: AngularFireDatabase = inject(AngularFireDatabase);
 
   public user: Signal<User | null | undefined> = toSignal(user(this.auth));
 
@@ -26,7 +25,7 @@ export class AuthService {
 
   currentUser!: CustomUser;
 
-  constructor(private localStorage: LocalStorageService) {
+  constructor(private localStorage: LocalStorageService, private db: AngularFireDatabase) {
     this.customUserRef = this.db.list(this.dbPath);
     this.customUserObjRef = this.db.database.ref(this.dbPath)
   }
