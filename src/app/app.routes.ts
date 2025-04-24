@@ -11,7 +11,7 @@ import { FortuneComponent } from './fortune/fortune.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'feed', pathMatch: 'full' },
-    { path: 'account/:username', component: ProfileComponent, },
+    { path: 'account/:username', component: ProfileComponent, canActivate: [AuthGuard]},
     { path: 'feed', component: FeedComponent },
     { path: 'upload', component: UploadPostComponent },
     { path: 'login', component: LoginComponent },

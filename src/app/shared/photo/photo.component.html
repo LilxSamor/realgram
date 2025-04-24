@@ -1,1 +1,1 @@
-<img class="crop" [src]="post.url" [alt]="post.description"/>
+<img *ngIf="post.url" class="crop" [src]="post.url" [alt]="post.description"/>

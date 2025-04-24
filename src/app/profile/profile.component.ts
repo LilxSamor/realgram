@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, NgZone, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
@@ -21,16 +21,16 @@ import { UploadService } from '../services/upload.service';
 import { AngularFireDatabase } from '@angular/fire/compat/database';
 import { FormsModule } from '@angular/forms';
 import { EditableDirective } from '../shared/directive/editable.directive';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
   imports: [NgFor, NgIf, NgStyle, MatButtonModule, MatDividerModule, MatIconModule, MatProgressSpinnerModule, MatTabsModule, UserPostComponent, FormsModule, EditableDirective],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
-  providers: [AuthService, FollowService, LocalStorageService, UserPostService, AngularFireDatabase],
   encapsulation: ViewEncapsulation.None
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnDestroy {
   private auth = inject(Auth);
 
   realPosts: Post[] = [];
@@ -51,6 +51,8 @@ export class ProfileComponent {
   fileSrc: string = '';
   alreadySelectedFile = false;
 
+  private routeSub: Subscription;
+
   constructor(
     private route: ActivatedRoute, 
     private localStorage: LocalStorageService, 
@@ -61,6 +63,12 @@ export class ProfileComponent {
     private db: AngularFireDatabase,
     private changeDetectorRef: ChangeDetectorRef,
     private ngZone: NgZone) {
+      this.routeSub = this.route.paramMap.subscribe(params => {
+        this.username = params.get('username') as string;
+        console.log("Navigated to profile for username:", this.username);
+        this.performProfileLoad();
+      });
+      /*
     this.route.paramMap.subscribe(params => {
       this.username = params.get('username') as string;
 
@@ -68,12 +76,40 @@ export class ProfileComponent {
         this.uid = this.auth.currentUser.uid;
         this.loadUserProfile(this.uid);
       }
-    });
+    });*/
+  }
+
+  ngOnDestroy() {
+    if(this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
+  }
+
+  private performProfileLoad() {
+    const user = this.auth.currentUser;
+    if(user) {
+      console.log("User authenticated:", user.uid);
+      this.uid = user.uid;
+      this.loadUserProfile(this.uid)
+    } else {
+      console.log("No user found. Waiting for auth state...");
+      this.auth.onAuthStateChanged(authUser => {
+        if(authUser) {
+          console.log("User authenticated after waiting:", authUser.uid);
+          this.uid = authUser.uid;
+          this.loadUserProfile(this.uid);
+        } else {
+          console.warn('User is not authenticated');
+        }
+      });
+    }
   }
 
   loadUserProfile(uid: string): void {
-    if(uid && this.username) {
-      this.authService.getUsername(uid).subscribe(data => {
+    /*
+    if(this.auth.currentUser) {
+      this.uid = this.auth.currentUser.uid;
+      this.authService.getUsername(this.uid).subscribe(data => {
         if(data) {
           this.currentUser = data;
           this.isProfileOfUser = this.currentUser.username === this.username;
@@ -86,10 +122,33 @@ export class ProfileComponent {
       }, error => {
         console.error('Error fetching username:', error);
       });
+    } else {
+      console.warn('User is not authenticated');
+    }*/
+    
+    if(uid && this.username) {
+      console.log("Loading profile for UID:", this.uid);
+      this.authService.getUsername(uid).subscribe(data => {
+        if(data) {
+          console.log("Profile data fetched successfully:", data);
+          this.currentUser = data;
+          this.isProfileOfUser = this.currentUser.username === this.username;
+
+          if(this.isProfileOfUser) {
+            this.profilePictureUrl = this.currentUser.picture_url ?? '';
+          }
+          this.updateUserProfile();
+        } else {
+          console.error('No data returned for user:', this.username);
+        }
+      }, error => {
+        console.error('Error fetching username:', error);
+      });
     }
   }
 
   updateUserProfile(): void {
+    this.realPosts = [];
     this.getUser();
     this.getFollowers();
     this.retrievePosts();

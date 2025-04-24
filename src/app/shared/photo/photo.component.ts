@@ -4,7 +4,7 @@ import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-photo',
-  imports: [],
+  imports: [NgIf],
   templateUrl: './photo.component.html',
   styleUrl: './photo.component.css'
 })

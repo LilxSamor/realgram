@@ -131,11 +131,12 @@ export class FeedComponent {
         post.username = article.source;
         post.news_title = article.title;
         post.description = article.description;
-        if(article.image) post.url = article.image;
-        if(!article.image) post.url = '';
+        if(article.url) post.url = article.url;
+        if(!article.url) post.url = '';
         post.news_source = article.source;
         post.news_published_at = article.publishedAt;
         post.is_news = true;
+        console.log(post);
         this.createPost(post);
       }
     });
@@ -159,6 +160,7 @@ export class FeedComponent {
   fetchNews() {
     this.newsService.getLatestNews().subscribe(data => {
       this.articles = data;
+      console.log(data);
       this.prepareNewsPosts();
     });
   }
