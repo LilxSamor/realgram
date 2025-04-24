@@ -13,11 +13,11 @@ import { LocalStorageService } from '../../services/local-storage.service';
   styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
-  auth = inject(Auth);
+  private router: Router = inject(Router);
   uid?: string;
   username?: string;
 
-  constructor(private authService: AuthService, private localStorage: LocalStorageService, private router: Router) {}
+  constructor(private localStorage: LocalStorageService) {}
 
   redirectToUserProfile() {
     this.username = this.localStorage.getItem('currentUsername') as string;

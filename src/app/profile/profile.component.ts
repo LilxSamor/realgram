@@ -30,24 +30,20 @@ import { EditableDirective } from '../shared/directive/editable.directive';
   encapsulation: ViewEncapsulation.None
 })
 export class ProfileComponent {
-  auth = inject(Auth);
+  private auth = inject(Auth);
 
   realPosts: Post[] = [];
-  
   userOfShownProfile?: CustomUser;
   currentUser: CustomUser = new CustomUser(this.auth);
   uid?: string = '';
   username?: string = '';
   profilePictureUrl: string = '';
-
   currentUserFollowsShownUser = false;
   currentUserFollow: any;
   following: number = 0;
   followers: number = 0;
   countOfUserPosts: number = 0;
-
   isProfileOfUser = false;
-
   isHovered: boolean = false;
   imageChangedEvent: any = '';
   croppedImage: any = '';
@@ -63,8 +59,23 @@ export class ProfileComponent {
     private uploadService: UploadService,
     private db: AngularFireDatabase,
     private changeDetectorRef: ChangeDetectorRef,
-    private ngZone: NgZone
-  ) {
+    private ngZone: NgZone) {
+      /*
+    this.route.paramMap.subscribe(params => {
+      this.username = params.get('username') as string;
+      this.uid = this.auth.currentUser?.uid;
+
+      if(this.uid) {
+        this.authService.getUsername(this.uid).subscribe(data => {
+          if(data) {
+            this.currentUser = data;
+            this.updateUserProfile();
+          }
+        });
+      }
+    });*/
+
+    /*
     this.uid = this.auth.currentUser?.uid;
     this.username = this.route.snapshot.paramMap.get('username') as string;
 
@@ -76,13 +87,41 @@ export class ProfileComponent {
           this.profilePictureUrl = data.picture_url!;
         }
       }
-    });
+      this.updateUserProfile();
+    });*/
   }
 
   ngOnInit(): void {
-    this.retrievePosts();
+    // this.updateUserProfile();
+    this.route.paramMap.subscribe(params => {
+      this.username = params.get('username') as string;
+      this.uid = this.auth.currentUser?.uid;
+
+      if (this.uid) {
+        this.loadUserProfile(this.uid);
+      }
+    });
+  }
+
+  loadUserProfile(uid: string): void {
+    this.authService.getUsername(uid).subscribe(data => {
+      if (data) {
+        this.currentUser = data;
+        this.isProfileOfUser = this.currentUser.username === this.username;
+        if (this.isProfileOfUser) {
+          this.profilePictureUrl = this.currentUser.picture_url!;
+        }
+        this.updateUserProfile(); // Fetch other relevant data
+      }
+    }, error => {
+      console.error('Error fetching username:', error);
+    });
+  }
+
+  updateUserProfile(): void {
     this.getUser();
     this.getFollowers();
+    this.retrievePosts();
   }
 
   updateProfilePicture() {
@@ -210,9 +249,11 @@ export class ProfileComponent {
       this.currentUserFollow = allFollows.find(a => a.username_follower === this.currentUser.username && a.username === this.username);
       this.followers = filteredFollowers.length;
       this.following = filteredFollowing.length;
+      this.currentUserFollowsShownUser = !!this.currentUserFollow;
+      /*
       if(this.currentUserFollow) (
         this.currentUserFollowsShownUser = true
-      )
+      )*/
     });
   }
 
